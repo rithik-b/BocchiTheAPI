@@ -35,7 +35,7 @@ public class FrameController : ControllerBase
         
         return new BocchiFrameResponse
         {
-            Url =  $"{(Request.IsHttps ? "https" : "http")}://{Request.Host}/{episodeDirectory}/{randomFile.Name}"
+            Url =  $"{(Request.Path == "/api/frames" ? "http://" : "")}{Request.Host}/{episodeDirectory}/{randomFile.Name}"
         };
     }
 }
