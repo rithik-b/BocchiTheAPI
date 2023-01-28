@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace BocchiTheAPI.Controllers;
 
 [ApiController]
+
+[Route("api/nya")]
 [Route("api/frames")]
 public class FrameController : ControllerBase
 {
