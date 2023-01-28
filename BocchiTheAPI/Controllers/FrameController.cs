@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BocchiTheAPI.Controllers;
 
 [ApiController]
-[Route("api/nya")]
+[Route("api/frames")]
 public class FrameController : ControllerBase
 {
     private static readonly string[] episodes = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "OP", "ED1", "ED2", "ED3" };
@@ -33,7 +33,7 @@ public class FrameController : ControllerBase
         
         return new BocchiFrameResponse
         {
-            Url =  $"{Request.Host}/{episodeDirectory}/{randomFile.Name}"
+            Url =  $"{(Request.IsHttps ? "https" : "http")}://{Request.Host}/{episodeDirectory}/{randomFile.Name}"
         };
     }
 }
