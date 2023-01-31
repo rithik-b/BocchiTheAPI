@@ -1,5 +1,6 @@
-import { createTRPCRouter } from "./trpc";
-import { exampleRouter } from "./routers/example";
+import { createTRPCRouter, publicProcedure } from "./trpc"
+import { z } from "zod"
+import { env } from "@env/server.mjs"
 
 /**
  * This is the primary router for your server.
@@ -7,8 +8,17 @@ import { exampleRouter } from "./routers/example";
  * All routers added in /api/routers should be manually added here
  */
 export const appRouter = createTRPCRouter({
-  example: exampleRouter,
-});
+  frame: publicProcedure.input(z.ostring()).query(({ input }) => {
+    const apiRoute = `${env.API_URL}/api/frames${
+      !input ? "" : `?episode=${input}`
+    }`
+    return fetch(apiRoute).then((res) => res.json()) as Promise<FrameResponse>
+  }),
+})
+
+interface FrameResponse {
+  url: string
+}
 
 // export type definition of API
-export type AppRouter = typeof appRouter;
+export type AppRouter = typeof appRouter
