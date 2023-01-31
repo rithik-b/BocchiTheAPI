@@ -7,7 +7,6 @@ function SiteHeader() {
         Boccher
       </h1>
       <div className="col-start-3 flex items-center justify-end">
-        {" "}
         <ThemeToggle />
       </div>
     </header>

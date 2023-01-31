@@ -32,7 +32,7 @@ const Home: NextPage = () => {
       <section>
         <div className="grid place-items-center space-y-2">
           {frameQuery.isFetched && !frameQuery.isError && (
-            <div className="h-6/12 grid w-6/12 content-center bg-slate-200 py-8 px-12 dark:bg-slate-700">
+            <div className="lg:h-6/12 grid w-screen content-center bg-slate-200 p-8 dark:bg-slate-700 lg:w-6/12">
               <AspectRatio ratio={16 / 9}>
                 <Image
                   src={frameQuery.data!.url}
