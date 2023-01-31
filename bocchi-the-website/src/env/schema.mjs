@@ -7,7 +7,8 @@ import { z } from "zod";
  */
 export const serverSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
-  API_URL: z.string().url(),
+  API_URL: z.string(),
+  INTERNAL_API_URL: z.string().url(),
 });
 
 /**
@@ -18,6 +19,7 @@ export const serverSchema = z.object({
 export const serverEnv = {
   NODE_ENV: process.env.NODE_ENV,
   API_URL: process.env.API_URL,
+  INTERNAL_API_URL: process.env.INTERNAL_API_URL,
 };
 
 /**

@@ -9,13 +9,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddRateLimiter(_ => _
-    .AddFixedWindowLimiter(policyName: "fixed", options =>
-    {
-        options.PermitLimit = 60;
-        options.Window = TimeSpan.FromSeconds(60);
-        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-    }));
 
 var app = builder.Build();
 
@@ -28,5 +21,4 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 app.UseStaticFiles();
-app.UseRateLimiter();
 app.Run();
