@@ -9,9 +9,9 @@ import { env } from "@env/server.mjs"
  */
 export const appRouter = createTRPCRouter({
   frame: publicProcedure.input(z.ostring()).query(({ input }) => {
-    const apiRoute = `${env.INTERNAL_API_URL}/api/frames?apiUrl=${env.API_URL}${
-      !input ? "" : `&episode=${input}`
-    }`
+    const apiRoute = `${env.INTERNAL_API_URL}/api/internal?apiUrl=${
+      env.API_URL
+    }${!input ? "" : `&episode=${input}`}`
     return fetch(apiRoute).then((res) => res.json()) as Promise<FrameResponse>
   }),
 })

@@ -1,12 +1,10 @@
 using BocchiTheAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
 
 namespace BocchiTheAPI.Controllers;
 
 [ApiController]
-
-[Route("api/nya")]
-[Route("api/frames")]
 public class FrameController : ControllerBase
 {
     private static readonly string[] episodes = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "OP", "ED1", "ED2", "ED3" };
@@ -20,7 +18,8 @@ public class FrameController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<BocchiFrameResponse> Get([FromQuery] string? episode, [FromQuery] string? apiUrl)
+    [Route("api/frames")]
+    public ActionResult<BocchiFrameResponse> Get([FromQuery] string? episode)
     {
         var normalizedEpisode = episode != null ? episode.Trim().ToUpper() : episodes[random.Next(0, episodes.Length)];
 
@@ -29,15 +28,60 @@ public class FrameController : ControllerBase
             return BadRequest("Invalid episode");
         }
 
-        var episodeDirectory = Path.Combine("img", normalizedEpisode);
-        var files = _hostEnvironment.WebRootFileProvider.GetDirectoryContents(episodeDirectory).Where(f => f.Name.EndsWith(".png"));
-        var randomFile = files.ElementAt(new Random().Next(0, files.Count()));
+        var (episodeDirectory, randomFile) = GetEpisode(normalizedEpisode);
 
-        var baseUrl = apiUrl ?? Request.Host.ToString();
-            
         return new BocchiFrameResponse
         {
-            Url =  $"{(Request.Path == "/api/frames" ? "http://" : "")}{baseUrl}/{episodeDirectory}/{randomFile.Name}"
+            Url =  $"http://{Request.Host.ToString()}/{episodeDirectory}/{randomFile.Name}"
         };
+    }
+    
+    [HttpGet]
+    [Route("api/nya")]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public ActionResult<BocchiFrameResponse> GetLegacy([FromQuery] string? episode)
+    {
+        var normalizedEpisode = episode != null ? episode.Trim().ToUpper() : episodes[random.Next(0, episodes.Length)];
+
+        if (!episodes.Contains(normalizedEpisode))
+        {
+            return BadRequest("Invalid episode");
+        }
+
+        var (episodeDirectory, randomFile) = GetEpisode(normalizedEpisode);
+
+        return new BocchiFrameResponse
+        {
+            Url =  $"{Request.Host.ToString()}/{episodeDirectory}/{randomFile.Name}"
+        };
+    }
+
+    [HttpGet]
+    [Route("api/internal")]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public ActionResult<BocchiFrameResponse> GetInternal([FromQuery] string? episode, [FromQuery] string apiUrl)
+    {
+        var normalizedEpisode = episode != null ? episode.Trim().ToUpper() : episodes[random.Next(0, episodes.Length)];
+
+        if (!episodes.Contains(normalizedEpisode))
+        {
+            return BadRequest("Invalid episode");
+        }
+
+        var (episodeDirectory, randomFile) = GetEpisode(normalizedEpisode);
+
+        return new BocchiFrameResponse
+        {
+            Url =  $"http://{apiUrl}/{episodeDirectory}/{randomFile.Name}"
+        };
+    }
+    
+    private (string episodeDirectory, IFileInfo randomFile) GetEpisode(string normalizedEpisode)
+    {
+        var episodeDirectory = Path.Combine("img", normalizedEpisode);
+        var files = _hostEnvironment.WebRootFileProvider.GetDirectoryContents(episodeDirectory)
+            .Where(f => f.Name.EndsWith(".png"));
+        var randomFile = files.ElementAt(new Random().Next(0, files.Count()));
+        return (episodeDirectory, randomFile);
     }
 }

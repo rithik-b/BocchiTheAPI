@@ -20,6 +20,7 @@ const config = {
       },
     ],
   },
+  transpilePackages: ['react-syntax-highlighter', 'swagger-client', 'swagger-ui-react'],
   output: "standalone",
 }
 

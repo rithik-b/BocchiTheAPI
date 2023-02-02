@@ -1,6 +1,6 @@
 import { type AppType } from "next/app"
-import { api } from "../utils/api"
-import "../styles/globals.css"
+import { api } from "@utils/api"
+import "@styles/globals.css"
 import SiteHeader from "@components/SiteHeader"
 import { ThemeProvider } from "next-themes"
 import React from "react"
@@ -21,7 +21,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
               }
               }`}</style>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <div className="h-screen bg-slate-100 dark:bg-slate-900">
+        <div className="h-full min-h-screen bg-slate-100 dark:bg-slate-900">
           <SiteHeader />
           <Component {...pageProps} />
         </div>
