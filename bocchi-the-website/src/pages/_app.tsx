@@ -5,6 +5,7 @@ import SiteHeader from "@components/SiteHeader"
 import { ThemeProvider } from "next-themes"
 import React from "react"
 import { Inter as FontSans } from "@next/font/google"
+import SiteFooter from "@components/SiteFooter"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -21,9 +22,10 @@ const MyApp: AppType = ({ Component, pageProps }) => {
               }
               }`}</style>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <div className="h-full min-h-screen bg-slate-100 dark:bg-slate-900">
+        <div className="min-h-screen bg-slate-100 dark:bg-slate-900">
           <SiteHeader />
           <Component {...pageProps} />
+          <SiteFooter />
         </div>
       </ThemeProvider>
     </>
