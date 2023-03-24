@@ -1,4 +1,5 @@
 using BocchiTheAPI.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 
@@ -18,6 +19,7 @@ public class FrameController : ControllerBase
     }
 
     [HttpGet]
+    [DisableCors]
     [Route("api/frames")]
     public ActionResult<BocchiFrameResponse> Get([FromQuery] string? episode)
     {
