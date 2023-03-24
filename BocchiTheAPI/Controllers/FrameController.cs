@@ -19,7 +19,7 @@ public class FrameController : ControllerBase
     }
 
     [HttpGet]
-    [DisableCors]
+    [EnableCors("AllowAll")]
     [Route("api/frames")]
     public ActionResult<BocchiFrameResponse> Get([FromQuery] string? episode)
     {
