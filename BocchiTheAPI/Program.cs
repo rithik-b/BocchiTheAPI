@@ -18,7 +18,9 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(corsBuilder =>
     {
-        corsBuilder.WithOrigins(builder.Configuration["WebApplicationUrl"]!);
+        corsBuilder.AllowAnyOrigin();
+        corsBuilder.AllowAnyHeader();
+        corsBuilder.AllowAnyMethod();
     });
 });
 
