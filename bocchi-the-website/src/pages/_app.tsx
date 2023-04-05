@@ -22,7 +22,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
               }
               }`}</style>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <div className="min-h-screen bg-slate-100 dark:bg-slate-900">
+        <div className="min-h-screen bg-pink-100 dark:bg-slate-900">
           <SiteHeader />
           <Component {...pageProps} />
           <SiteFooter />
