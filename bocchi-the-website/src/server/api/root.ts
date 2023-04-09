@@ -18,6 +18,8 @@ export const appRouter = createTRPCRouter({
 
 interface FrameResponse {
   url: string
+  episode: string
+  timestamp: number
 }
 
 // export type definition of API

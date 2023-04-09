@@ -6,6 +6,7 @@ import Image from "next/image"
 import { AspectRatio } from "@radix-ui/react-aspect-ratio"
 import { Button } from "@components/Button"
 import { Loader2 } from "lucide-react"
+import timestampToTimecode from "@utils/timestampToTimecode"
 
 const Home: NextPage = () => {
   const [isLoading, setIsLoading] = React.useState(true)
@@ -36,7 +37,12 @@ const Home: NextPage = () => {
               <AspectRatio ratio={16 / 9}>
                 <Image
                   src={frameQuery.data!.url}
-                  alt={"Bocchi the Rock"}
+                  alt={`Episode ${
+                    frameQuery.data!.episode
+                  } - ${timestampToTimecode(frameQuery.data!.timestamp)}`}
+                  title={`Episode ${
+                    frameQuery.data!.episode
+                  } - ${timestampToTimecode(frameQuery.data!.timestamp)}`}
                   fill
                   unoptimized
                   className="rounded-md object-cover"

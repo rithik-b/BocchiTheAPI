@@ -1,4 +1,7 @@
 using Microsoft.OpenApi.Models;
+using SurrealDB.Abstractions;
+using SurrealDB.Configuration;
+using SurrealDB.Driver.Rest;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +30,18 @@ builder.Services.AddCors(options =>
         corsBuilder.AllowAnyHeader();
     });
 });
+
+var cfg = Config.Create()
+    .WithEndpoint("127.0.0.1:8000")
+    .WithDatabase("bocchi")
+    .WithNamespace("global")
+    .WithBasicAuth("root", "root")
+    .WithRest(insecure: true).Build();
+
+var db = new DatabaseRest(cfg);
+
+builder.Services.AddSingleton<IDatabase>(db);
+builder.Services.AddSingleton(db);
 
 var app = builder.Build();
 
