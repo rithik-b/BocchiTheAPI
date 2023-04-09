@@ -1,16 +1,16 @@
 import { type NextPage } from "next"
 import Head from "next/head"
 import React from "react"
-import { api } from "@utils/api"
 import Image from "next/image"
 import { AspectRatio } from "@radix-ui/react-aspect-ratio"
 import { Button } from "@components/Button"
 import { Loader2 } from "lucide-react"
 import timestampToTimecode from "@utils/timestampToTimecode"
+import useQueryBocchiFrame from "@hooks/useQueryBocchiFrame";
 
 const Home: NextPage = () => {
   const [isLoading, setIsLoading] = React.useState(true)
-  const frameQuery = api.frame.useQuery(undefined, {
+  const frameQuery = useQueryBocchiFrame({
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
