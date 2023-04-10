@@ -1,4 +1,4 @@
-namespace BocchiTheAPI.Models;
+namespace BocchiTheAPI.Abstractions.Models;
 
 public class BocchiFrameResponse
 {

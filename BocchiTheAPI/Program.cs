@@ -31,6 +31,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddOrleansClient(b => b.UseLocalhostClustering());
+
 var cfg = Config.Create()
     .WithEndpoint("127.0.0.1:8000")
     .WithDatabase("bocchi")

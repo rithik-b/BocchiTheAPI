@@ -27,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BocchiTheAPI.Grains.Interfaces\BocchiTheAPI.Grains.Interfaces.csproj" />
+      <ProjectReference Include="..\BocchiTheAPI.Abstractions\BocchiTheAPI.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>
