@@ -1,19 +1,22 @@
-import { type NextPage } from "next"
+import { useRouter } from "next/router"
+import React, { useState } from "react"
 import Head from "next/head"
-import React from "react"
-import Image from "next/image"
 import { AspectRatio } from "@radix-ui/react-aspect-ratio"
-import { Button } from "@components/primitives/Button"
-import { Loader2 } from "lucide-react"
-import timestampToTimecode from "@utils/timestampToTimecode"
-import useQueryBocchiFrame from "@hooks/useQueryBocchiFrame"
+import Image from "next/image"
+import useQueryQuizFrame from "@hooks/useQueryQuizFrame"
+import EpisodeSelector, { Episode } from "@components/EpisodeSelector"
 
-const Home: NextPage = () => {
+const Room = () => {
+  const router = useRouter()
+  const { room } = router.query
+  const [episode, setEpisode] = useState(Episode.EP1)
+
   const [isLoading, setIsLoading] = React.useState(true)
-  const frameQuery = useQueryBocchiFrame({
+  const frameQuery = useQueryQuizFrame(room as string, {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: !!room,
   })
 
   const onClick = () => {
@@ -36,13 +39,8 @@ const Home: NextPage = () => {
             <div className="lg:h-8/12 grid w-screen content-center bg-pink-300 dark:bg-slate-700 md:p-8 lg:w-8/12">
               <AspectRatio ratio={16 / 9}>
                 <Image
-                  src={frameQuery.data!.url}
-                  alt={`Episode ${
-                    frameQuery.data!.episode
-                  } - ${timestampToTimecode(frameQuery.data!.timestamp)}`}
-                  title={`Episode ${
-                    frameQuery.data!.episode
-                  } - ${timestampToTimecode(frameQuery.data!.timestamp)}`}
+                  src={frameQuery.data!}
+                  alt={"An image from Bocchi The Rock"}
                   fill
                   unoptimized
                   className="rounded-md object-cover"
@@ -51,14 +49,15 @@ const Home: NextPage = () => {
               </AspectRatio>
             </div>
           )}
-          <Button onClick={onClick} disabled={isLoading}>
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isLoading ? "Getting Boccher" : "Get Boccher"}
-          </Button>
+          <EpisodeSelector
+            className="m-5"
+            episode={episode}
+            setEpisode={setEpisode}
+          />
         </div>
       </section>
     </main>
   )
 }
 
-export default Home
+export default Room

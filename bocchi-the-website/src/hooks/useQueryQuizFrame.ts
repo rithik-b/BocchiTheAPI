@@ -1,24 +1,25 @@
 import { useQuery } from "@tanstack/react-query"
 import { env } from "@env/client.mjs"
 import { UseQueryOptions } from "@tanstack/react-query/src/types"
+import { z } from "zod"
 
-interface BocchiFrame {
-  url: string
-  episode: string
-  timestamp: number
-}
+const roomSchema = z.string().uuid()
 
 function useQueryBocchiFrame(
+  room: string,
   options?: Omit<
-    UseQueryOptions<BocchiFrame, any, BocchiFrame, string[]>,
+    UseQueryOptions<string, any, string, string[]>,
     "queryKey" | "queryFn" | "initialData"
   > & { initialData?: () => undefined }
 ) {
   return useQuery(
     ["frame"],
     async () => {
-      const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/api/frames`)
-      return (await response.json()) as BocchiFrame
+      roomSchema.parse(room)
+      const response = await fetch(
+        `${env.NEXT_PUBLIC_QUIZ_API_URL}/quiz/${room}`
+      )
+      return await response.text()
     },
     options
   )

@@ -1,21 +1,14 @@
-using Microsoft.OpenApi.Models;
+﻿using BocchiTheAPI.Quiz.Hubs;
 using SurrealDB.Abstractions;
 using SurrealDB.Configuration;
 using SurrealDB.Driver.Rest;
+using Orleans.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+builder.Host.UseOrleans(siloBuilder => 
 {
-    options.AddServer(new OpenApiServer
-    {
-        Url = builder.Configuration["ApiUrl"]
-    });
+    siloBuilder.UseLocalhostClustering();
 });
 builder.Services.AddCors(options =>
 {
@@ -23,13 +16,9 @@ builder.Services.AddCors(options =>
     {
         corsBuilder.WithOrigins(builder.Configuration["WebApplicationUrl"]!);
     });
-    options.AddPolicy("AllowAll", corsBuilder =>
-    {
-        corsBuilder.AllowAnyOrigin();
-        corsBuilder.AllowAnyMethod();
-        corsBuilder.AllowAnyHeader();
-    });
 });
+
+builder.Services.AddSignalR();
 
 var cfg = Config.Create()
     .WithEndpoint("127.0.0.1:8000")
@@ -42,11 +31,10 @@ var db = new DatabaseRest(cfg);
 
 builder.Services.AddSingleton<IDatabase>(db);
 builder.Services.AddSingleton(db);
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 var app = builder.Build();
-
-app.UseSwagger();
+app.MapHub<QuizHub>("/quizHub");
 app.MapControllers();
-app.UseStaticFiles();
 app.UseCors();
 app.Run();

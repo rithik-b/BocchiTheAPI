@@ -1,6 +1,7 @@
-using BocchiTheAPI.Abstractions.Models;
+using BocchiTheAPI.Common.Models;
+using Orleans;
 
-namespace BocchiTheAPI.Abstractions;
+namespace BocchiTheAPI.Common;
 
 public interface IBocchiQuizGrain : IGrainWithGuidKey
 {

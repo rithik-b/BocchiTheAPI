@@ -2,11 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BocchiTheAPI", "BocchiTheAPI\BocchiTheAPI.csproj", "{9CDFD905-252E-4C06-942D-6FFC69241B93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BocchiTheAPI.Abstractions", "BocchiTheAPI.Abstractions\BocchiTheAPI.Abstractions.csproj", "{E5B8DF05-23F2-408F-ABE8-A0BD28833E12}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BocchiTheAPI.Common", "BocchiTheAPI.Common\BocchiTheAPI.Common.csproj", "{E5B8DF05-23F2-408F-ABE8-A0BD28833E12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BocchiTheAPI.Grains", "BocchiTheAPI.Grains\BocchiTheAPI.Grains.csproj", "{DAF0B4AD-442B-4341-B1CC-CD0459536A19}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BocchiTheAPI.Silo", "BocchiTheAPI.Silo\BocchiTheAPI.Silo.csproj", "{8A4E3C78-D83F-4DF7-AAED-3770A794AB11}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BocchiTheAPI.Quiz", "BocchiTheAPI.Quiz\BocchiTheAPI.Quiz.csproj", "{8A4E3C78-D83F-4DF7-AAED-3770A794AB11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,10 +20,6 @@ Global
 		{E5B8DF05-23F2-408F-ABE8-A0BD28833E12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5B8DF05-23F2-408F-ABE8-A0BD28833E12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5B8DF05-23F2-408F-ABE8-A0BD28833E12}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DAF0B4AD-442B-4341-B1CC-CD0459536A19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DAF0B4AD-442B-4341-B1CC-CD0459536A19}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DAF0B4AD-442B-4341-B1CC-CD0459536A19}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DAF0B4AD-442B-4341-B1CC-CD0459536A19}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8A4E3C78-D83F-4DF7-AAED-3770A794AB11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8A4E3C78-D83F-4DF7-AAED-3770A794AB11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A4E3C78-D83F-4DF7-AAED-3770A794AB11}.Release|Any CPU.ActiveCfg = Release|Any CPU

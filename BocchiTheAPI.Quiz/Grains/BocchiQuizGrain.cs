@@ -1,6 +1,6 @@
-using BocchiTheAPI.Abstractions;
-using BocchiTheAPI.Abstractions.Extensions;
-using BocchiTheAPI.Abstractions.Models;
+using BocchiTheAPI.Common;
+using BocchiTheAPI.Common.Extensions;
+using BocchiTheAPI.Common.Models;
 using SurrealDB.Abstractions;
 
 namespace BocchiTheAPI.Grains;

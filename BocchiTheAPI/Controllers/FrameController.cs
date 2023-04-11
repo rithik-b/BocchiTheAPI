@@ -1,5 +1,6 @@
-using BocchiTheAPI.Abstractions.Extensions;
-using BocchiTheAPI.Abstractions.Models;
+using BocchiTheAPI.Common.Extensions;
+using BocchiTheAPI.Common.Models;
+using BocchiTheAPI.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using SurrealDB.Abstractions;
@@ -30,7 +31,7 @@ public class FrameController : ControllerBase
         return new BocchiFrameResponse
         {
             Url =  $"http://{Request.Host.ToString()}/img/{frame.identifier}.png",
-            Episode = GetEpisodeFromSource(frame.source),
+            Episode = EpisodeUtils.GetEpisodeFromSource(frame.source),
             Timestamp = frame.timestamp
         };
     }
@@ -48,18 +49,8 @@ public class FrameController : ControllerBase
         return new BocchiFrameResponse
         {
             Url =  $"{Request.Host.ToString()}/img/{frame.identifier}.png",
-            Episode = GetEpisodeFromSource(frame.source),
+            Episode = EpisodeUtils.GetEpisodeFromSource(frame.source),
             Timestamp = frame.timestamp
         };
     }
-    
-    private string GetEpisodeFromSource(string source)
-    => source switch
-    {
-        "mv:op" => "op",
-        "mv:ed1" => "ed1",
-        "mv:ed2" => "ed2",
-        "mv:ed3" => "ed3",
-        _ => source.Replace("episode:", "")
-    };
 }

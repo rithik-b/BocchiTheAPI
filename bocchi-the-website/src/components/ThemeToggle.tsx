@@ -5,9 +5,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@components/DropdownMenu"
-import { Button } from "@components/Button"
-import { Icons } from "@components/Icons"
+} from "@components/primitives/DropdownMenu"
+import { Button } from "@components/primitives/Button"
+import { Icons } from "@components/primitives/Icons"
 
 export function ThemeToggle() {
   const { setTheme } = useTheme()

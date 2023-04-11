@@ -1,4 +1,4 @@
-namespace BocchiTheAPI.Abstractions.Models;
+namespace BocchiTheAPI.Common.Models;
 
 
 [GenerateSerializer]
