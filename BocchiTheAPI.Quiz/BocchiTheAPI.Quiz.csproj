@@ -18,11 +18,11 @@
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
       <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
       <PackageReference Include="Microsoft.Orleans.Server" Version="7.1.1" />
-      <PackageReference Include="SurrealDB.Driver.Rest" Version="1.0.8" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\BocchiTheAPI.Common\BocchiTheAPI.Common.csproj" />
+      <ProjectReference Include="..\Surreal.Net\src\Extensions\Service\Service.csproj" />
     </ItemGroup>
 
 </Project>

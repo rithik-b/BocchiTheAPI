@@ -1,12 +1,10 @@
 using Microsoft.OpenApi.Models;
-using SurrealDB.Abstractions;
 using SurrealDB.Configuration;
-using SurrealDB.Driver.Rest;
+using SurrealDB.Extensions.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -30,18 +28,12 @@ builder.Services.AddCors(options =>
         corsBuilder.AllowAnyHeader();
     });
 });
-
-var cfg = Config.Create()
-    .WithEndpoint("127.0.0.1:8000")
+builder.Services.AddSurrealDB(config => 
+    config.WithEndpoint("127.0.0.1:8000")
     .WithDatabase("bocchi")
     .WithNamespace("global")
     .WithBasicAuth("root", "root")
-    .WithRest(insecure: true).Build();
-
-var db = new DatabaseRest(cfg);
-
-builder.Services.AddSingleton<IDatabase>(db);
-builder.Services.AddSingleton(db);
+    .WithRest(insecure: true));
 
 var app = builder.Build();
 

@@ -1,8 +1,6 @@
 ﻿using BocchiTheAPI.Quiz.Hubs;
-using SurrealDB.Abstractions;
 using SurrealDB.Configuration;
-using SurrealDB.Driver.Rest;
-using Orleans.Hosting;
+using SurrealDB.Extensions.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -17,23 +15,17 @@ builder.Services.AddCors(options =>
         corsBuilder.WithOrigins(builder.Configuration["WebApplicationUrl"]!);
     });
 });
-
 builder.Services.AddSignalR();
-
-var cfg = Config.Create()
-    .WithEndpoint("127.0.0.1:8000")
+builder.Services.AddSurrealDB(config =>
+    config.WithEndpoint("127.0.0.1:8000")
     .WithDatabase("bocchi")
     .WithNamespace("global")
     .WithBasicAuth("root", "root")
-    .WithRest(insecure: true).Build();
-
-var db = new DatabaseRest(cfg);
-
-builder.Services.AddSingleton<IDatabase>(db);
-builder.Services.AddSingleton(db);
+    .WithRest(insecure: true));
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 var app = builder.Build();
+
 app.MapHub<QuizHub>("/quizHub");
 app.MapControllers();
 app.UseCors();
