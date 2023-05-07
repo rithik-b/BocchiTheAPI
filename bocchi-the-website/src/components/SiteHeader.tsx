@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { ThemeToggle } from "@boccher/components/ThemeToggle"
+import UserInfo from "@boccher/components/UserInfo"
 
 function SiteHeader() {
   return (
@@ -12,6 +13,7 @@ function SiteHeader() {
       </h1>
       <div className="col-start-3 flex items-center justify-end">
         <ThemeToggle />
+        <UserInfo />
       </div>
     </header>
   )
