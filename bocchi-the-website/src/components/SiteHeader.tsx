@@ -1,5 +1,5 @@
-import { ThemeToggle } from "@components/ThemeToggle"
 import Link from "next/link"
+import { ThemeToggle } from "@boccher/components/ThemeToggle"
 
 function SiteHeader() {
   return (

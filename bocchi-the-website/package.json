@@ -9,8 +9,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@microsoft/signalr": "^7.0.5",
     "@next/font": "^13.1.6",
     "@radix-ui/react-aspect-ratio": "^1.0.1",
+    "@radix-ui/react-avatar": "^1.0.2",
     "@radix-ui/react-dropdown-menu": "^2.0.2",
     "@radix-ui/react-label": "^2.0.1",
     "@radix-ui/react-toggle": "^1.0.2",

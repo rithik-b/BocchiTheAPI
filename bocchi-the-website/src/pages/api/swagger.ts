@@ -1,4 +1,4 @@
-import { env } from "@env/server.mjs"
+import { env } from "@boccher/env/server.mjs"
 import { NextApiRequest, NextApiResponse } from "next"
 
 async function swagger(req: NextApiRequest, res: NextApiResponse) {

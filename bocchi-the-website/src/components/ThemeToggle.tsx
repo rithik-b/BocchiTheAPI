@@ -5,9 +5,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@components/primitives/DropdownMenu"
-import { Button } from "@components/primitives/Button"
-import { Icons } from "@components/primitives/Icons"
+} from "@boccher/components/primitives/DropdownMenu"
+import { Button } from "@boccher/components/primitives/Button"
+import { Icons } from "@boccher/components/primitives/Icons"
 
 export function ThemeToggle() {
   const { setTheme } = useTheme()

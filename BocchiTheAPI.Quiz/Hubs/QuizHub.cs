@@ -4,5 +4,4 @@ namespace BocchiTheAPI.Quiz.Hubs;
 
 public class QuizHub : Hub
 {
-    
 }

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { env } from "@env/client.mjs"
+import { env } from "@boccher/env/client.mjs"
 import { UseQueryOptions } from "@tanstack/react-query/src/types"
 import { z } from "zod"
 
@@ -8,9 +8,9 @@ const roomSchema = z.string().uuid()
 function useQueryBocchiFrame(
   room: string,
   options?: Omit<
-    UseQueryOptions<string, any, string, string[]>,
-    "queryKey" | "queryFn" | "initialData"
-  > & { initialData?: () => undefined }
+    UseQueryOptions<string, never, string, string[]>,
+    "queryKey" | "queryFn"
+  >
 ) {
   return useQuery(
     ["frame"],

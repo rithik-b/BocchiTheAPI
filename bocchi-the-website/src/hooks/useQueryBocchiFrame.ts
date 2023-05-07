@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { env } from "@env/client.mjs"
+import { env } from "@boccher/env/client.mjs"
 import { UseQueryOptions } from "@tanstack/react-query/src/types"
 
 interface BocchiFrame {

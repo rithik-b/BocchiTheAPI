@@ -3,8 +3,8 @@ import React, { useState } from "react"
 import Head from "next/head"
 import { AspectRatio } from "@radix-ui/react-aspect-ratio"
 import Image from "next/image"
-import useQueryQuizFrame from "@hooks/useQueryQuizFrame"
-import EpisodeSelector, { Episode } from "@components/EpisodeSelector"
+import useQueryQuizFrame from "@boccher/hooks/useQueryQuizFrame"
+import EpisodeSelector, { Episode } from "@boccher/components/EpisodeSelector"
 
 const Room = () => {
   const router = useRouter()

@@ -3,10 +3,10 @@ import Head from "next/head"
 import React from "react"
 import Image from "next/image"
 import { AspectRatio } from "@radix-ui/react-aspect-ratio"
-import { Button } from "@components/primitives/Button"
+import { Button } from "@boccher/components/primitives/Button"
 import { Loader2 } from "lucide-react"
-import timestampToTimecode from "@utils/timestampToTimecode"
-import useQueryBocchiFrame from "@hooks/useQueryBocchiFrame"
+import timestampToTimecode from "@boccher/utils/timestampToTimecode"
+import useQueryBocchiFrame from "@boccher/hooks/useQueryBocchiFrame"
 
 const Home: NextPage = () => {
   const [isLoading, setIsLoading] = React.useState(true)

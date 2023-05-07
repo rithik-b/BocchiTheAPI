@@ -1,5 +1,5 @@
-import cn from "@utils/cn"
-import { Toggle } from "@components/primitives/Toggle"
+import cn from "@boccher/utils/cn"
+import { Toggle } from "@boccher/components/primitives/Toggle"
 
 export enum Episode {
   EP1 = 1,

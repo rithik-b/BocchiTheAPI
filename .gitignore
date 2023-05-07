@@ -7,3 +7,4 @@ BocchiTheAPI/wwwroot/img
 .DS_Store
 bocchi-the-website/.idea
 *.user
+*.local.json
