@@ -1,5 +1,4 @@
 import * as React from "react"
-import { useTheme } from "next-themes"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,9 +10,7 @@ import { Button } from "@boccher/components/primitives/Button"
 import useQueryUserIdentity from "@boccher/hooks/useQueryUserIdentity"
 import UserAvatar from "@boccher/components/UserAvatar"
 import { LogOut } from "lucide-react"
-import { useCallback } from "react"
-import { env } from "@boccher/env/client.mjs"
-import { useRouter } from "next/router"
+import useMutationSignout from "@boccher/hooks/useMutationSignout"
 
 const UserInfo = () => {
   const { isFetched, data: userIdentity } = useQueryUserIdentity({
@@ -22,16 +19,7 @@ const UserInfo = () => {
     refetchOnReconnect: false,
   })
 
-  const router = useRouter()
-
-  const logout = useCallback(async () => {
-    await fetch(`${env.NEXT_PUBLIC_QUIZ_API_URL}/auth/signout`, {
-      method: "POST",
-      credentials: "include",
-    })
-
-    router.reload()
-  }, [router])
+  const { mutate, isLoading } = useMutationSignout()
 
   if (!isFetched || !userIdentity) return null
 
@@ -47,7 +35,8 @@ const UserInfo = () => {
         <DropdownMenuLabel>
           {userIdentity.name}#{userIdentity.discriminator}
         </DropdownMenuLabel>
-        <DropdownMenuItem onClick={logout}>
+
+        <DropdownMenuItem onClick={() => mutate()} disabled={isLoading}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
         </DropdownMenuItem>
