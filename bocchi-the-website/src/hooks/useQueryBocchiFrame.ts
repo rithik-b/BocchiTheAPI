@@ -10,7 +10,7 @@ interface BocchiFrame {
 
 function useQueryBocchiFrame(
   options?: Omit<
-    UseQueryOptions<BocchiFrame, any, BocchiFrame, string[]>,
+    UseQueryOptions<BocchiFrame, never, BocchiFrame, string[]>,
     "queryKey" | "queryFn" | "initialData"
   > & { initialData?: () => undefined }
 ) {

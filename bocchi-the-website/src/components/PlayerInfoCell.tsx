@@ -10,10 +10,8 @@ const PlayerInfoCell = (props: Props) => {
 
   return (
     <div className="flex items-center">
-      <div className="h-10 w-10 flex-shrink-0">
-        <UserAvatar user={player} />
-      </div>
-      <div className="ml-4 flex flex-row gap-1">
+      <UserAvatar user={player} />
+      <div className="ml-4 flex flex-row gap-0.5">
         <div className="text-md font-medium text-gray-900 dark:text-slate-100">
           {player.name}
         </div>

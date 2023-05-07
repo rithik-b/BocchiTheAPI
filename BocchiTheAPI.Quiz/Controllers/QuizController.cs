@@ -1,5 +1,6 @@
 using BocchiTheAPI.Common;
 using BocchiTheAPI.Common.Models;
+using BocchiTheAPI.Quiz.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BocchiTheAPI.Quiz.Controllers;
@@ -14,6 +15,14 @@ public class QuizController : ControllerBase
     {
         _client = client;
         _config = config;
+    }
+    
+    [HttpGet]
+    [Route("quiz/{room}/users")]
+    public async Task<ActionResult<IReadOnlyList<User>>> GetUsers(Guid room)
+    {
+        var grain = _client.GetGrain<IBocchiQuizGrain>(room);
+        return Ok(await grain.GetJoinedUsers());
     }
 
     [HttpGet]

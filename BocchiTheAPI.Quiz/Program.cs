@@ -16,8 +16,10 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(corsBuilder =>
     {
-        corsBuilder.WithOrigins(builder.Configuration["WebApplicationUrl"]!);
-        corsBuilder.AllowCredentials();
+        corsBuilder.WithOrigins(builder.Configuration["WebApplicationUrl"]!)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 builder.Services.AddSignalR();
@@ -44,14 +46,21 @@ builder.Services.AddAuthentication(options =>
     options.ClientId = builder.Configuration["Discord:ClientId"]!;
     options.ClientSecret = builder.Configuration["Discord:ClientSecret"]!;
     options.Scope.Add("identify");
-    
+
     options.ClaimActions.MapCustomJson("urn:discord:avatar:url", user =>
-        string.Format(
+    {
+        var avatar = user.GetString("avatar");
+        
+        if (avatar == null)
+            return "https://cdn.discordapp.com/embed/avatars/0.png";
+        
+        return string.Format(
             CultureInfo.InvariantCulture,
             "https://cdn.discordapp.com/avatars/{0}/{1}.{2}",
             user.GetString("id"),
-            user.GetString("avatar"),
-            user.GetString("avatar")!.StartsWith("a_") ? "gif" : "png"));
+            avatar,
+            avatar.StartsWith("a_") ? "gif" : "png");
+    });
 });
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 

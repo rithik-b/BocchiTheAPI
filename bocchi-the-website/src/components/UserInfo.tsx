@@ -4,13 +4,14 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@boccher/components/primitives/DropdownMenu"
 import { Button } from "@boccher/components/primitives/Button"
 import useQueryUserIdentity from "@boccher/hooks/useQueryUserIdentity"
 import UserAvatar from "@boccher/components/UserAvatar"
-import { LogOut } from "lucide-react"
 import useMutationSignout from "@boccher/hooks/useMutationSignout"
+import { Icons } from "@boccher/components/primitives/Icons"
 
 const UserInfo = () => {
   const { isFetched, data: userIdentity } = useQueryUserIdentity({
@@ -35,9 +36,9 @@ const UserInfo = () => {
         <DropdownMenuLabel>
           {userIdentity.name}#{userIdentity.discriminator}
         </DropdownMenuLabel>
-
+        <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => mutate()} disabled={isLoading}>
-          <LogOut className="mr-2 h-4 w-4" />
+          <Icons.logout className="mr-2 h-4 w-4" />
           <span>Log out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

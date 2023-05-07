@@ -1,9 +1,8 @@
-import { buttonVariants } from "@boccher/components/primitives/Button"
+import { Button, buttonVariants } from "@boccher/components/primitives/Button"
 import Link from "next/link"
 import { env } from "@boccher/env/client.mjs"
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -11,14 +10,24 @@ import {
 } from "@boccher/components/primitives/Card"
 import { Icons } from "@boccher/components/primitives/Icons"
 import useQueryUserIdentity from "@boccher/hooks/useQueryUserIdentity"
-import PlayerInfoCell from "@boccher/components/PlayerInfoCell"
+import { useRouter } from "next/router"
+import React, { useCallback, useState } from "react"
+import noop from "@boccher/utils/noop"
+import { v4 as uuidv4 } from "uuid"
 
 const Quiz = () => {
+  const router = useRouter()
+  const [isCreatingRoom, setIsCreatingRoom] = useState(false)
   const { isFetched, data: userIdentity } = useQueryUserIdentity({
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
   })
+
+  const createRoom = useCallback(() => {
+    setIsCreatingRoom(true)
+    router.push(`/quiz/${uuidv4()}`).then().catch(noop)
+  }, [router])
 
   return (
     <div className="grid place-content-center pt-3">
@@ -42,13 +51,13 @@ const Quiz = () => {
         <Card>
           <CardHeader>
             <CardTitle>Quiz</CardTitle>
-            <CardDescription>
-              Invite more people by simply copying the link of this page!
-            </CardDescription>
+            <CardDescription>Create a room to continue</CardDescription>
           </CardHeader>
-          <CardContent>
-            <PlayerInfoCell player={userIdentity} />
-          </CardContent>
+          <CardFooter className="grid place-content-center">
+            <Button onClick={createRoom} disabled={isCreatingRoom}>
+              Create Room
+            </Button>
+          </CardFooter>
         </Card>
       )}
     </div>

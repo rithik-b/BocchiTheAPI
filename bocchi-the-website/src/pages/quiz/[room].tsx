@@ -1,62 +1,93 @@
+import React, { useEffect, useMemo, useState } from "react"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@boccher/components/primitives/Card"
+import Link from "next/link"
+import { Button, buttonVariants } from "@boccher/components/primitives/Button"
+import { env } from "@boccher/env/client.mjs"
+import { Icons } from "@boccher/components/primitives/Icons"
+import PlayerInfoCell from "@boccher/components/PlayerInfoCell"
+import { z } from "zod"
 import { useRouter } from "next/router"
-import React, { useState } from "react"
-import Head from "next/head"
-import { AspectRatio } from "@radix-ui/react-aspect-ratio"
-import Image from "next/image"
-import useQueryQuizFrame from "@boccher/hooks/useQueryQuizFrame"
-import EpisodeSelector, { Episode } from "@boccher/components/EpisodeSelector"
+import useSignalR from "@boccher/hooks/useSignalR"
+import useQueryQuizPlayers from "@boccher/hooks/useQueryQuizPlayers"
+import useQueryUserIdentity from "@boccher/hooks/useQueryUserIdentity"
+import noop from "@boccher/utils/noop"
+
+const roomSchema = z.string().uuid()
 
 const Room = () => {
   const router = useRouter()
   const { room } = router.query
-  const [episode, setEpisode] = useState(Episode.EP1)
+  const isRoomValid = useMemo(() => roomSchema.safeParse(room).success, [room])
+  useSignalR(room as string, isRoomValid)
+  const { isFetched: isFetchedPlayers, data: players } = useQueryQuizPlayers(
+    room as string,
+    {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      enabled: isRoomValid,
+    }
+  )
+  const { isFetched: isFetchedUserIdentity, data: userIdentity } =
+    useQueryUserIdentity({
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+    })
 
-  const [isLoading, setIsLoading] = React.useState(true)
-  const frameQuery = useQueryQuizFrame(room as string, {
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    enabled: !!room,
-  })
-
-  const onClick = () => {
-    setIsLoading(true)
-    void frameQuery.refetch()
-  }
+  useEffect(() => {
+    if (
+      isFetchedPlayers &&
+      isFetchedUserIdentity &&
+      !userIdentity &&
+      players!.length === 0
+    ) {
+      router.push("/quiz").then().catch(noop)
+    }
+  }, [isFetchedPlayers, isFetchedUserIdentity, userIdentity, players, router])
 
   return (
-    <main>
-      <Head>
-        <title>Boccher</title>
-        <meta name="description" content="Get a random Boccher frame" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <section>
-        <div className="grid place-items-center space-y-2">
-          {frameQuery.isFetched && !frameQuery.isError && (
-            <div className="lg:h-8/12 grid w-screen content-center bg-pink-300 dark:bg-slate-700 md:p-8 lg:w-8/12">
-              <AspectRatio ratio={16 / 9}>
-                <Image
-                  src={frameQuery.data!}
-                  alt={"An image from Bocchi The Rock"}
-                  fill
-                  unoptimized
-                  className="rounded-md object-cover"
-                  onLoad={() => setIsLoading(false)}
-                />
-              </AspectRatio>
-            </div>
+    <div className="grid place-content-center pt-3">
+      {isFetchedPlayers && isFetchedUserIdentity && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Quiz</CardTitle>
+            <CardDescription>
+              {userIdentity
+                ? "Invite more people by simply copying the link of this page!"
+                : "Login with Discord to join the quiz!"}
+            </CardDescription>
+          </CardHeader>
+          {(players?.length ?? 0) > 0 && (
+            <CardContent>
+              {players?.map((player, key) => (
+                <PlayerInfoCell player={player} key={key} />
+              ))}
+            </CardContent>
           )}
-          <EpisodeSelector
-            className="m-5"
-            episode={episode}
-            setEpisode={setEpisode}
-          />
-        </div>
-      </section>
-    </main>
+          <CardFooter className="grid place-content-center">
+            {userIdentity ? (
+              <Button>Start</Button>
+            ) : (
+              <Link
+                className={buttonVariants({ variant: "default" })}
+                href={`${env.NEXT_PUBLIC_QUIZ_API_URL}/auth/signin`}
+              >
+                <Icons.discord className="mr-2 h-4 w-4" />
+                Login with Discord
+              </Link>
+            )}
+          </CardFooter>
+        </Card>
+      )}
+    </div>
   )
 }
 

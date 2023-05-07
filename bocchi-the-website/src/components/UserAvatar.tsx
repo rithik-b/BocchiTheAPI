@@ -14,7 +14,9 @@ const UserAvatar = (props: Props) => {
   return (
     <Avatar>
       <AvatarImage src={user.avatarUrl} alt={user.name} />
-      <AvatarFallback>{user.name}</AvatarFallback>
+      <AvatarFallback>
+        {user.name.match(/\b[A-Z]/g)?.join("") || ""}
+      </AvatarFallback>
     </Avatar>
   )
 }
