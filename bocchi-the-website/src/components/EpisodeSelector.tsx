@@ -1,5 +1,6 @@
 import cn from "@boccher/utils/cn"
 import { Toggle } from "@boccher/components/primitives/Toggle"
+import { Button } from "@boccher/components/primitives/Button"
 
 export enum Episode {
   EP1 = 1,
@@ -41,7 +42,7 @@ const episodes = [
 
 interface Props {
   className?: string
-  episode: Episode
+  episode: Episode | null
   setEpisode: (episode: Episode) => void
 }
 
@@ -60,6 +61,7 @@ const EpisodeSelector = (props: Props) => {
           {episode}
         </Toggle>
       ))}
+      {props.episode && <Button>Skip</Button>}
     </div>
   )
 }

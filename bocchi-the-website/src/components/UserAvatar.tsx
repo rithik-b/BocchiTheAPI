@@ -1,4 +1,4 @@
-import UserIdentity from "@boccher/types/UserIdentity"
+import UserIdentity from "@boccher/models/UserIdentity"
 import {
   Avatar,
   AvatarFallback,

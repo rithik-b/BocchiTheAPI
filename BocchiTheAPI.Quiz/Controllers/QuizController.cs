@@ -1,5 +1,5 @@
-using BocchiTheAPI.Common;
 using BocchiTheAPI.Common.Models;
+using BocchiTheAPI.Quiz.Grains.Interfaces;
 using BocchiTheAPI.Quiz.Models;
 using Microsoft.AspNetCore.Mvc;
 

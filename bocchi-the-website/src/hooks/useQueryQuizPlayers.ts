@@ -1,5 +1,5 @@
 import { UseQueryOptions } from "@tanstack/react-query/src/types"
-import UserIdentity from "@boccher/types/UserIdentity"
+import UserIdentity from "@boccher/models/UserIdentity"
 import { env } from "@boccher/env/client.mjs"
 import { useQuery } from "@tanstack/react-query"
 
