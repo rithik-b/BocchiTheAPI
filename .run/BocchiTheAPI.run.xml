@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="BocchiTheAPI" type="CompoundRunConfigurationType">
+    <toRun name="BocchiTheAPI.Quiz: http" type="LaunchSettings" />
+    <toRun name="BocchiTheAPI: http" type="LaunchSettings" />
+    <method v="2" />
+  </configuration>
+</component>
