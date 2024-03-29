@@ -3,7 +3,6 @@ import { AspectRatio } from "@radix-ui/react-aspect-ratio"
 import Image from "next/image"
 import EpisodeSelector, { Episode } from "@boccher/components/EpisodeSelector"
 import useQueryQuizFrame from "@boccher/hooks/useQueryQuizFrame"
-import PlayerInfoCell from "@boccher/components/PlayerInfoCell"
 import useQueryQuizPlayers from "@boccher/hooks/useQueryQuizPlayers"
 import PlayerPointsTable from "@boccher/components/PlayerPointsTable"
 
@@ -15,7 +14,7 @@ const QuizGame = (props: Props) => {
   const { room } = props
   const [episode, setEpisode] = useState<Episode | null>(null)
 
-  const [isLoading, setIsLoading] = React.useState(true)
+  const [isLoading, setIsLoading] = useState(true)
   const frameQuery = useQueryQuizFrame(room, {
     refetchOnWindowFocus: false,
     refetchOnMount: false,

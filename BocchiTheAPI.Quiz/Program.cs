@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using BocchiTheAPI.Quiz;
 using BocchiTheAPI.Quiz.Hubs;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -63,6 +64,7 @@ builder.Services.AddAuthentication(options =>
     });
 });
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+builder.Services.AddSingleton<ConnectedPlayersManager>();
 
 var app = builder.Build();
 

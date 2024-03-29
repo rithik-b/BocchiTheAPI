@@ -17,8 +17,8 @@ async function joinRoom(room: string, queryClient: QueryClient) {
   await queryClient.invalidateQueries(quizPlayersQueryKey)
 }
 
-async function leaveRoom(room: string) {
-  await connection.invoke("LeaveRoom", room)
+async function leaveRoom() {
+  await connection.invoke("LeaveRoom")
   await connection.stop()
 }
 
@@ -42,7 +42,7 @@ function useSignalR(room: string, isRoomValid: boolean) {
     })
 
     return () => {
-      leaveRoom(room).catch((err) => console.log("Error leaving room", err))
+      leaveRoom().catch((err) => console.log("Error leaving room", err))
     }
   }, [isRoomValid, queryClient, room, userIdentity])
 }

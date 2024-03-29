@@ -1,6 +1,6 @@
 import { atom } from "jotai"
 
-const isStarted = atom(true)
+const isStarted = atom(false)
 
 const QuizAtoms = {
   isStarted,
