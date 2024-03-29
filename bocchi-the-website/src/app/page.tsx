@@ -1,15 +1,15 @@
 "use client"
 
 import { type NextPage } from "next"
-import React from "react"
 import Image from "next/image"
 import { Loader2 } from "lucide-react"
 import { api } from "../trpc/react"
 import { Button } from "../components/ui/button"
 import { AspectRatio } from "../components/ui/aspect-ratio"
+import { useState } from "react"
 
 const Home: NextPage = () => {
-  const [isLoading, setIsLoading] = React.useState(true)
+  const [isLoading, setIsLoading] = useState(true)
   const frameQuery = api.frames.randomFrame.useQuery()
 
   const onClick = () => {

@@ -14,11 +14,11 @@ const response = (
 }[];
 const values = response.map((response) => ({
   id: response.identifier,
-  source: response.source,
+  source: response.source.split(":")[1].trim(),
   timestamp: parseInt(response.timestamp),
 }));
 
-const sqlite = new Database("sqlite.db");
+const sqlite = new Database("db.sqlite");
 const db = drizzle(sqlite);
 migrate(db, { migrationsFolder: "./drizzle" });
 db.insert(frames).values(values).execute();
