@@ -1,5 +1,6 @@
 FROM imbios/bun-node:18-slim AS deps
 ARG DEBIAN_FRONTEND=noninteractive
+ARG DATABASE_URL=db/db.sqlite
 
 WORKDIR /app
 
@@ -12,15 +13,13 @@ FROM deps AS builder
 WORKDIR /app
 COPY . .
 
-ENV DATABASE_URL=db/db.sqlite
+ENV DATABASE_URL=$DATABASE_URL
 RUN bun run build
 
 # Production image, copy all the files and run next
 FROM node:18-slim AS runner
 WORKDIR /app
 
-ARG CONFIG_FILE
-COPY $CONFIG_FILE /app/.env
 ENV NODE_ENV production
 ENV DATABASE_URL=db/db.sqlite
 
