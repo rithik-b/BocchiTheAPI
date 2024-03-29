@@ -43,3 +43,5 @@ yarn-error.log*
 
 # images
 public/img
+
+db/db.sqlite

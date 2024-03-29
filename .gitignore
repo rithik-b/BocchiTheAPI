@@ -8,4 +8,3 @@ BocchiTheAPI/wwwroot/img
 bocchi-the-website/.idea
 *.user
 *.local.json
-bocchi-the-website/db.sqlite
