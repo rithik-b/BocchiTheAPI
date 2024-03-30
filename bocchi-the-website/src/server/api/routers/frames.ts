@@ -5,7 +5,7 @@ import {
 import { db } from "../../db"
 import { sql } from "drizzle-orm"
 import { TRPCError } from "@trpc/server"
-import { Episode } from "@rithik/bocchi-the-website/data/episode"
+import { type Episode } from "@rithik/bocchi-the-website/data/episode"
 
 export const framesRouter = createTRPCRouter({
   randomFrame: publicProcedure.query(async () => {
