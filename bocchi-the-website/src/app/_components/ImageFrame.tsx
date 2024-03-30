@@ -1,6 +1,6 @@
 import { type StaticImport } from "next/dist/shared/lib/get-img-props"
-import { cn } from "../lib/utils"
-import { AspectRatio } from "./ui/aspect-ratio"
+import { cn } from "../../lib/utils"
+import { AspectRatio } from "../../components/ui/aspect-ratio"
 import Image, { type ImageProps } from "next/image"
 
 const ImageFrame = (
