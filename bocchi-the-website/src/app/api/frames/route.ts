@@ -1,42 +1,23 @@
-import { type Episode, episodes } from "@rithik/bocchi-the-website/data/episode"
-import { db } from "@rithik/bocchi-the-website/server/db"
-import { sql } from "drizzle-orm"
+import getRandomFrame from "@rithik/bocchi-the-website/server/getRandomFrame"
+import { getTRPCErrorFromUnknown } from "@trpc/server"
 import { type NextRequest } from "next/server"
 
 export async function GET(req: NextRequest) {
-  const source = req.nextUrl.searchParams.get("episode")?.trim()?.toLowerCase()
+  const episode = req.nextUrl.searchParams.get("episode")
 
-  if (!!source && !episodes.includes(source as Episode)) {
-    return new Response("Invalid episode", {
-      status: 400,
-    })
-  }
-
-  const frame = await db.query.frames.findFirst({
-    where: !!source ? (frame, { eq }) => eq(frame.source, source) : undefined,
-    orderBy: sql`RANDOM()`,
-  })
-
-  if (!frame) {
-    return new Response("No frames found", {
-      status: 500,
-    })
-  }
-
-  const url = `img/${frame.id}.png`
-
-  return Response.json(
-    {
-      url,
-      source: frame.source,
-      timestamp: frame.timestamp,
-    },
-    {
+  try {
+    const randomFrame = await getRandomFrame(episode)
+    return Response.json(randomFrame, {
       status: 200,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET",
       },
-    },
-  )
+    })
+  } catch (e) {
+    const trpcError = getTRPCErrorFromUnknown(e)
+    return new Response(trpcError.message, {
+      status: trpcError.code === "BAD_REQUEST" ? 400 : 500,
+    })
+  }
 }
