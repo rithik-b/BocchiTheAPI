@@ -1,30 +1,12 @@
+import { episodes } from "@rithik/bocchi-the-website/data/episode"
 import { db } from "@rithik/bocchi-the-website/server/db"
 import { sql } from "drizzle-orm"
 import { type NextRequest } from "next/server"
 
-const validEpisodes = [
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "10",
-  "11",
-  "12",
-  "op",
-  "ed1",
-  "ed2",
-  "ed3",
-]
-
 export async function GET(req: NextRequest) {
   const source = req.nextUrl.searchParams.get("episode")?.trim()?.toLowerCase()
 
-  if (!!source && !validEpisodes.includes(source)) {
+  if (!!source && !episodes.includes(source)) {
     return new Response("Invalid episode", {
       status: 400,
     })

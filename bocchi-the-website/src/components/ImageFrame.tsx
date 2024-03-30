@@ -10,7 +10,7 @@ const ImageFrame = (
   },
 ) => {
   return (
-    <div className="flex w-full justify-center rounded-b-md bg-pink-300 dark:bg-slate-700 md:p-8 lg:w-8/12">
+    <div className="flex w-full justify-center rounded-b-md bg-pink-300 dark:bg-slate-700 md:p-8">
       <AspectRatio ratio={16 / 9}>
         {!!props.src && (
           <Image
