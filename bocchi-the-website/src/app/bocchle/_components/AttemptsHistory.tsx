@@ -4,7 +4,7 @@ import { Check, X } from "lucide-react"
 import { cva } from "class-variance-authority"
 
 const attemptVariants = cva(
-  "flex w-14 items-center justify-center rounded-full p-1 text-white text-sm",
+  "flex w-14 items-center justify-center rounded-full p-1 text-white text-sm animate-in slide-in-from-right-full",
   {
     variants: {
       isCorrect: {
