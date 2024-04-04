@@ -1,39 +1,38 @@
 import { useAtomValue } from "jotai/react"
 import GameStateAtoms from "../GameStateAtoms"
-import { Check, X } from "lucide-react"
-import { cva } from "class-variance-authority"
+import { atom } from "jotai"
+import Attempt from "./Attempt"
 
-const attemptVariants = cva(
-  "flex w-14 items-center justify-center rounded-full p-1 text-white text-sm animate-in slide-in-from-right-full",
-  {
-    variants: {
-      isCorrect: {
-        true: "bg-green-600",
-        false: "bg-red-600",
-      },
-    },
-  },
-)
+interface AttemptWithPlaceholder {
+  attempt: string
+  status: "correct" | "incorrect" | "placeholder"
+}
+
+const attemptsHistoryWithPlaceHolders = atom((get) => {
+  const attemptsHistory = get(GameStateAtoms.attemptsHistory)
+  const placeholderCount = 6 - attemptsHistory.length
+  const placeholders = Array.from({ length: placeholderCount }).map(() => ({
+    attempt: "",
+    status: "placeholder",
+  }))
+  return [
+    ...attemptsHistory.map((a) => ({
+      attempt: a.attempt,
+      status: a.isCorrect ? "correct" : "incorrect",
+    })),
+    ...placeholders,
+  ] as AttemptWithPlaceholder[]
+})
 
 const AttemptsHistory = () => {
-  const attemptsHistory = useAtomValue(GameStateAtoms.attemptsHistory)
+  const attemptsHistory = useAtomValue(attemptsHistoryWithPlaceHolders)
 
   return (
     <div className="flex min-h-8 flex-wrap justify-center gap-2">
       {attemptsHistory.map((attempt, index) => (
-        <div
-          className={attemptVariants({
-            isCorrect: attempt.isCorrect,
-          })}
-          key={index}
-        >
-          {attempt.isCorrect ? (
-            <Check className="size-4" />
-          ) : (
-            <X className="size-4" />
-          )}
+        <Attempt status={attempt.status} key={index}>
           {attempt.attempt}
-        </div>
+        </Attempt>
       ))}
     </div>
   )

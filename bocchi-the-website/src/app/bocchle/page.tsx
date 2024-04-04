@@ -10,7 +10,7 @@ import Keypad from "./_components/Keypad"
 import GameStateAtoms from "./GameStateAtoms"
 import AttemptsHistory from "./_components/AttemptsHistory"
 import Results from "./_components/Results"
-import { type VariantProps, cva } from "class-variance-authority"
+import Attempt from "./_components/Attempt"
 
 const useResetAtomsOnNewDay = () => {
   const resetAtomsIfNeeded = useAtomCallback(
@@ -28,15 +28,6 @@ const useResetAtomsOnNewDay = () => {
   useEffect(() => resetAtomsIfNeeded(), [resetAtomsIfNeeded])
 }
 
-const answerVariants = cva("min-h-7 text-xl transition-all", {
-  variants: {
-    status: {
-      incorrect: "animate-shake text-red-600",
-      correct: "text-green-600",
-    },
-  },
-})
-
 const BocchlePage = () => {
   useResetAtomsOnNewDay()
   const todaysDate = useAtomValue(GameStateAtoms.todaysDate)
@@ -46,8 +37,9 @@ const BocchlePage = () => {
   const setAttemptsHistory = useSetAtom(GameStateAtoms.attemptsHistory)
   const gameEnded = useAtomValue(GameStateAtoms.gameEnded)
   const [answer, setAnswer] = useState("")
-  const [answerStatus, setAnswerStatus] =
-    useState<VariantProps<typeof answerVariants>["status"]>(undefined)
+  const [answerStatus, setAnswerStatus] = useState<
+    "correct" | "incorrect" | undefined
+  >(undefined)
 
   const { data: currentFrame } = api.bocchle.todaysFrames.useQuery({
     todaysDate,
@@ -103,19 +95,22 @@ const BocchlePage = () => {
         {!!currentFrame && (
           <div
             className={cn(
-              "grid h-full w-full grid-rows-[1fr] transition-[grid-template-rows] duration-300",
-              gameEnded && "grid-rows-[0fr]",
+              "grid w-full grid-rows-[1fr] transition-[grid-template-rows] duration-300",
+              gameEnded && "h-0 grid-rows-[0fr]",
             )}
           >
-            <div
-              className={cn(
-                "flex flex-col items-center gap-5 overflow-hidden sm:gap-2",
-              )}
-            >
-              <span className={answerVariants({ status: answerStatus })}>
-                {answer}
-              </span>
-              <Keypad value={answer} onChange={setAnswer} />
+            <div className={cn("flex flex-col items-center overflow-hidden")}>
+              <Keypad value={answer} onChange={setAnswer}>
+                <Attempt
+                  className={cn(
+                    answerStatus === "incorrect" && "animate-shake",
+                    "w-full",
+                  )}
+                  status={answerStatus}
+                >
+                  {answer}
+                </Attempt>
+              </Keypad>
             </div>
           </div>
         )}
