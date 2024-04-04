@@ -1,15 +1,18 @@
 import { Button } from "@rithik/bocchi-the-website/components/ui/button"
-import { type SetStateAction, memo, type Dispatch } from "react"
+import { cn } from "@rithik/bocchi-the-website/lib/utils"
+import { Delete } from "lucide-react"
+import { type SetStateAction, type Dispatch } from "react"
 import { useEffect } from "react"
 
 interface Props {
   value: string
   onChange: Dispatch<SetStateAction<string>>
   disabled?: boolean
+  className?: string
 }
 
 const Keypad = (props: Props) => {
-  const { value, onChange, disabled = false } = props
+  const { value, onChange, disabled = false, className } = props
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -20,15 +23,23 @@ const Keypad = (props: Props) => {
         return
       }
 
-      const numericValue = parseInt(key)
+      const inputValue = parseInt(key)
 
-      if (!isNaN(numericValue)) {
-        onChange((value) => {
-          if (!value || value === "0" || value === "1") {
-            return `${value}${numericValue}`
+      if (!isNaN(inputValue)) {
+        onChange((currentValue) => {
+          if (currentValue === "0" && inputValue !== 0) {
+            return `${currentValue}${inputValue}`
           }
 
-          return value
+          if (currentValue === "1" && inputValue <= 2) {
+            return `${currentValue}${inputValue}`
+          }
+
+          if (!currentValue && (inputValue === 0 || inputValue === 1)) {
+            return `${inputValue}`
+          }
+
+          return currentValue
         })
       }
     }
@@ -41,7 +52,12 @@ const Keypad = (props: Props) => {
   }, [onChange])
 
   return (
-    <div className="grid grid-cols-3 gap-2 rounded-md border border-pink-900 p-4 dark:border-slate-200">
+    <div
+      className={cn(
+        "grid grid-cols-3 gap-2 rounded-md border border-pink-900 p-4 dark:border-slate-200",
+        className,
+      )}
+    >
       <Button
         onClick={() => onChange((v) => `${v}1`)}
         disabled={disabled || (value !== "" && value !== "0" && value !== "1")}
@@ -103,9 +119,15 @@ const Keypad = (props: Props) => {
       >
         0
       </Button>
-      <div></div>
+      <Button
+        variant="destructive"
+        onClick={() => onChange((value) => value.slice(0, -1))}
+        disabled={disabled || value?.length === 2 || value === ""}
+      >
+        <Delete />
+      </Button>
     </div>
   )
 }
 
-export default memo(Keypad)
+export default Keypad

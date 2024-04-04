@@ -10,6 +10,7 @@ import Keypad from "./_components/Keypad"
 import GameStateAtoms from "./GameStateAtoms"
 import AttemptsHistory from "./_components/AttemptsHistory"
 import Results from "./_components/Results"
+import { VariantProps, cva } from "class-variance-authority"
 
 const useResetAtomsOnNewDay = () => {
   const resetAtomsIfNeeded = useAtomCallback(
@@ -27,6 +28,15 @@ const useResetAtomsOnNewDay = () => {
   useEffect(() => resetAtomsIfNeeded(), [resetAtomsIfNeeded])
 }
 
+const answerVariants = cva("min-h-7 text-xl transition-all", {
+  variants: {
+    status: {
+      incorrect: "animate-shake text-red-600",
+      correct: "text-green-600",
+    },
+  },
+})
+
 const BocchlePage = () => {
   useResetAtomsOnNewDay()
   const todaysDate = useAtomValue(GameStateAtoms.todaysDate)
@@ -36,7 +46,8 @@ const BocchlePage = () => {
   const setAttemptsHistory = useSetAtom(GameStateAtoms.attemptsHistory)
   const gameEnded = useAtomValue(GameStateAtoms.gameEnded)
   const [answer, setAnswer] = useState("")
-  const [isIncorrect, setIsIncorrect] = useState(false)
+  const [answerStatus, setAnswerStatus] =
+    useState<VariantProps<typeof answerVariants>["status"]>(undefined)
 
   const { data: currentFrame } = api.bocchle.todaysFrames.useQuery({
     todaysDate,
@@ -54,7 +65,7 @@ const BocchlePage = () => {
         answer,
       })
       if (!isCorrect) {
-        setIsIncorrect(true)
+        setAnswerStatus("incorrect")
         setTimeout(() => {
           setUnsuccessfulAttempts((a) => a + 1)
           setAttemptsHistory((h) => [
@@ -62,15 +73,17 @@ const BocchlePage = () => {
             { attempt: answer, isCorrect: false },
           ])
           setAnswer("")
-          setIsIncorrect(false)
+          setAnswerStatus(undefined)
         }, 1500)
       } else {
+        setAnswerStatus("correct")
         setTimeout(() => {
           setAttemptsHistory((h) => [
             ...h,
             { attempt: answer, isCorrect: true },
           ])
           setAnswer("")
+          setAnswerStatus(undefined)
         }, 1500)
       }
     }
@@ -81,23 +94,27 @@ const BocchlePage = () => {
   }, [answer])
 
   return (
-    <main className="flex flex-col items-center gap-5 pb-5">
-      <div className="flex w-full flex-col items-center gap-2 md:max-w-[768px]">
+    <main className="flex flex-col items-center justify-center gap-5 pb-4">
+      <div className="flex w-full flex-col items-center md:max-w-[768px]">
         <ImageFrame src={currentFrame} />
       </div>
-      {!!currentFrame && <AttemptsHistory />}
-      <span
-        className={cn(
-          "min-h-6",
-          isIncorrect ? "animate-shake text-red-600" : "",
+      <div className="flex flex-col items-center gap-2 px-5">
+        {!!currentFrame && <AttemptsHistory />}
+        {!!currentFrame && (
+          <div
+            className={cn(
+              "flex h-64 flex-col items-center gap-2 overflow-hidden transition-[height] duration-300",
+              gameEnded && "h-0",
+            )}
+          >
+            <span className={answerVariants({ status: answerStatus })}>
+              {answer}
+            </span>
+            <Keypad value={answer} onChange={setAnswer} />
+          </div>
         )}
-      >
-        {answer}
-      </span>
-      {!gameEnded && !!currentFrame && (
-        <Keypad value={answer} onChange={setAnswer} disabled={!currentFrame} />
-      )}
-      {gameEnded && <Results />}
+        {gameEnded && <Results />}
+      </div>
     </main>
   )
 }

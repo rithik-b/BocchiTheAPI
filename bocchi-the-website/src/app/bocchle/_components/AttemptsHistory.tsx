@@ -4,7 +4,7 @@ import { Check, X } from "lucide-react"
 import { cva } from "class-variance-authority"
 
 const attemptVariants = cva(
-  "flex w-14 items-center justify-center rounded-full p-1 text-white",
+  "flex w-14 items-center justify-center rounded-full p-1 text-white text-sm",
   {
     variants: {
       isCorrect: {
@@ -19,7 +19,7 @@ const AttemptsHistory = () => {
   const attemptsHistory = useAtomValue(GameStateAtoms.attemptsHistory)
 
   return (
-    <div className="flex h-8 flex-wrap gap-2">
+    <div className="flex min-h-8 flex-wrap justify-center gap-2">
       {attemptsHistory.map((attempt, index) => (
         <div
           className={attemptVariants({

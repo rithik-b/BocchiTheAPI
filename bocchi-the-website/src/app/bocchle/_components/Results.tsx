@@ -12,8 +12,14 @@ const Results = () => {
   if (!answer) return null
 
   return (
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    <span>{hasWon ? "You won!" : `The answer was Episode ${answer} :(`}</span>
+    <>
+      <span className="text-center text-3xl">
+        {hasWon ? "You won!" : `The answer was ${answer} 😞`}
+      </span>
+      <span className="text-center text-2xl font-medium">
+        See you next play! 🐧
+      </span>
+    </>
   )
 }
 

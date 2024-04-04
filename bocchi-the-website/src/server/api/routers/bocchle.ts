@@ -2,6 +2,7 @@ import {
   type Episode,
   episodes,
   edToEpisodes,
+  formattedEpisodes,
 } from "@rithik/bocchi-the-website/data/episode"
 import {
   createTRPCRouter,
@@ -95,6 +96,6 @@ export const bocchleRouter = createTRPCRouter({
     .input(z.object({ todaysDate: z.date() }))
     .query(({ ctx }) => {
       const { randomEpisode } = ctx
-      return randomEpisode
+      return formattedEpisodes.get(randomEpisode as Episode)
     }),
 })
