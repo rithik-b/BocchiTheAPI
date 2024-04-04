@@ -54,7 +54,7 @@ const Keypad = (props: Props) => {
   return (
     <div
       className={cn(
-        "flex h-full w-full flex-col items-center gap-5 rounded-md border-pink-900 dark:border-slate-200 sm:w-auto sm:gap-2 sm:border sm:p-4",
+        "flex h-full w-full flex-col items-center gap-2 rounded-md border-pink-900 dark:border-slate-200 sm:w-auto sm:border sm:p-4",
         className,
       )}
     >
