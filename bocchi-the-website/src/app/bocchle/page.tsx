@@ -94,23 +94,27 @@ const BocchlePage = () => {
   }, [answer])
 
   return (
-    <main className="flex flex-col items-center justify-center gap-5 pb-4">
+    <main className="flex h-full flex-col items-center justify-between pb-4 sm:justify-center sm:gap-5">
       <div className="flex w-full flex-col items-center md:max-w-[768px]">
         <ImageFrame src={currentFrame} />
       </div>
-      <div className="flex flex-col items-center gap-2 px-5">
+      <div className="flex w-full flex-col items-center gap-2 px-5">
         {!!currentFrame && <AttemptsHistory />}
         {!!currentFrame && (
           <div
             className={cn(
-              "flex h-64 flex-col items-center gap-2 overflow-hidden transition-[height] duration-300",
-              gameEnded && "h-0",
+              "grid w-full grid-rows-[1fr] transition-[grid-template-rows] duration-300",
+              gameEnded && "grid-rows-[0fr]",
             )}
           >
-            <span className={answerVariants({ status: answerStatus })}>
-              {answer}
-            </span>
-            <Keypad value={answer} onChange={setAnswer} />
+            <div
+              className={cn("flex flex-col items-center gap-2 overflow-hidden")}
+            >
+              <span className={answerVariants({ status: answerStatus })}>
+                {answer}
+              </span>
+              <Keypad value={answer} onChange={setAnswer} />
+            </div>
           </div>
         )}
         {gameEnded && <Results />}

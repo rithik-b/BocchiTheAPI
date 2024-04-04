@@ -54,7 +54,7 @@ const Keypad = (props: Props) => {
   return (
     <div
       className={cn(
-        "grid grid-cols-3 gap-2 rounded-md border border-pink-900 p-4 dark:border-slate-200",
+        "grid w-full grid-cols-3 gap-2 rounded-md border-pink-900 dark:border-slate-200 sm:w-auto sm:border sm:p-4",
         className,
       )}
     >
