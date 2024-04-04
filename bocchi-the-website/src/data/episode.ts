@@ -37,3 +37,9 @@ export const formattedEpisodes = new Map<Episode, string>([
   ["ed2", "Ending 2"],
   ["ed3", "Ending 3"],
 ])
+
+export const edToEpisodes = new Map([
+  ["ed1", ["1", "2", "3"]],
+  ["ed2", ["4", "5", "6", "7"]],
+  ["ed3", ["8", "9", "10", "11"]],
+])

@@ -10,3 +10,7 @@ export function formatDuration(duration: number) {
   const seconds = duration % 60
   return `${minutes}:${seconds.toString().padStart(2, "0")}`
 }
+
+export function getDateString(date: Date) {
+  return `${date.getFullYear()}${date.getUTCMonth()}${date.getDate()}`
+}

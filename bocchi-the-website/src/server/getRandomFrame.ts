@@ -15,7 +15,7 @@ const getRandomFrame = async (episode?: string | null) => {
     })
   }
 
-  const randomFrame = await db.query.frames.findFirst({
+  const randomFrame = await db.query.framesTable.findFirst({
     where: !!sanitizedEpisode
       ? (frame, { eq }) => eq(frame.source, sanitizedEpisode)
       : undefined,
@@ -29,7 +29,7 @@ const getRandomFrame = async (episode?: string | null) => {
     })
   }
 
-  const lastFrame = await db.query.frames.findFirst({
+  const lastFrame = await db.query.framesTable.findFirst({
     columns: { source: true, timestamp: true },
     where: (frame, { eq }) => eq(frame.source, randomFrame.source),
     orderBy: (frame, { desc }) => desc(frame.timestamp),

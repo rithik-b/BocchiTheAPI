@@ -8,6 +8,8 @@ import ImageFrame from "./ImageFrame"
 import { api } from "@rithik/bocchi-the-website/trpc/react"
 import { type inferRouterOutputs } from "@trpc/server"
 import { type framesRouter } from "@rithik/bocchi-the-website/server/api/routers/frames"
+import { formattedEpisodes } from "@rithik/bocchi-the-website/data/episode"
+import { formatDuration } from "@rithik/bocchi-the-website/lib/utils"
 
 interface Props {
   firstFrame: inferRouterOutputs<typeof framesRouter>["randomFrame"]
@@ -34,7 +36,7 @@ const RandomFrame = (props: Props) => {
         <ImageFrame
           src={currentFrame.url}
           onLoad={() => setIsLoading(false)}
-          priority
+          alt={`Bocchi the Rock! ${formattedEpisodes.get(currentFrame.source)} ${formatDuration(currentFrame.timestamp)}`}
         />
         <EpisodeDuration
           episode={currentFrame.source}

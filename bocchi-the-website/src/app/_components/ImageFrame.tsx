@@ -16,9 +16,11 @@ const ImageFrame = (
           <Image
             {...props}
             src={props.src}
-            alt="A frame from the show Bocchi the Rock!"
+            alt={props.alt ?? "A frame from the show Bocchi the Rock!"}
             fill
             unoptimized
+            priority
+            loading="eager"
             className={cn("object-cover md:rounded-md", props.className)}
           />
         )}

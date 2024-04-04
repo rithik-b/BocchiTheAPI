@@ -3,6 +3,7 @@ import {
   createCallerFactory,
   createTRPCRouter,
 } from "@rithik/bocchi-the-website/server/api/trpc"
+import { bocchleRouter } from "./routers/bocchle"
 
 /**
  * This is the primary router for your server.
@@ -11,6 +12,7 @@ import {
  */
 export const appRouter = createTRPCRouter({
   frames: framesRouter,
+  bocchle: bocchleRouter,
 })
 
 // export type definition of API

@@ -15,6 +15,7 @@ const createQueryClient = () =>
         refetchOnWindowFocus: false,
         refetchOnMount: false,
         refetchOnReconnect: false,
+        placeholderData: (prevData: unknown) => prevData,
       },
     },
   })
