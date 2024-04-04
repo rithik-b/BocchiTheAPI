@@ -54,59 +54,68 @@ const Keypad = (props: Props) => {
   return (
     <div
       className={cn(
-        "grid w-full grid-cols-3 gap-2 rounded-md border-pink-900 dark:border-slate-200 sm:w-auto sm:border sm:p-4",
+        "grid h-full w-full grid-cols-3 gap-2 rounded-md border-pink-900 dark:border-slate-200 sm:w-auto sm:border sm:p-4",
         className,
       )}
     >
       <Button
+        className="h-full"
         onClick={() => onChange((v) => `${v}1`)}
         disabled={disabled || (value !== "" && value !== "0" && value !== "1")}
       >
         1
       </Button>
       <Button
+        className="h-full"
         onClick={() => onChange((v) => `${v}2`)}
         disabled={disabled || (value !== "0" && value !== "1")}
       >
         2
       </Button>
       <Button
+        className="h-full"
         onClick={() => onChange((v) => `${v}3`)}
         disabled={disabled || value !== "0"}
       >
         3
       </Button>
       <Button
+        className="h-full"
         onClick={() => onChange((v) => `${v}4`)}
         disabled={disabled || value !== "0"}
       >
         4
       </Button>
       <Button
+        className="h-full"
         onClick={() => onChange((v) => `${v}5`)}
         disabled={disabled || value !== "0"}
       >
         5
       </Button>
       <Button
+        className="h-full"
         onClick={() => onChange((v) => `${v}6`)}
         disabled={disabled || value !== "0"}
       >
         6
       </Button>
       <Button
+        className="h-full"
         onClick={() => onChange((v) => `${v}7`)}
         disabled={disabled || value !== "0"}
       >
         7
       </Button>
       <Button
+        className="h-full"
         onClick={() => onChange((v) => `${v}8`)}
         disabled={disabled || value !== "0"}
       >
         8
       </Button>
       <Button
+        className="h-full"
         onClick={() => onChange((v) => `${v}9`)}
         disabled={disabled || value !== "0"}
       >
@@ -114,12 +123,14 @@ const Keypad = (props: Props) => {
       </Button>
       <div></div>
       <Button
+        className="h-full"
         onClick={() => onChange((v) => `${v}0`)}
         disabled={disabled || (value !== "" && value !== "1")}
       >
         0
       </Button>
       <Button
+        className="h-full"
         variant="destructive"
         onClick={() => onChange((value) => value.slice(0, -1))}
         disabled={disabled || value?.length === 2 || value === ""}
