@@ -1,3 +1,4 @@
+import { env } from "@rithik/bocchi-the-website/env"
 import getRandomFrame from "@rithik/bocchi-the-website/server/getRandomFrame"
 import { getTRPCErrorFromUnknown } from "@trpc/server"
 import { type NextRequest } from "next/server"
@@ -7,13 +8,19 @@ export async function GET(req: NextRequest) {
 
   try {
     const randomFrame = await getRandomFrame(episode)
-    return Response.json(randomFrame, {
-      status: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET",
+    return Response.json(
+      {
+        ...randomFrame,
+        url: `${env.NEXT_PUBLIC_WEBSITE_URL}/${randomFrame.url}`,
       },
-    })
+      {
+        status: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET",
+        },
+      },
+    )
   } catch (e) {
     const trpcError = getTRPCErrorFromUnknown(e)
     return new Response(trpcError.message, {
