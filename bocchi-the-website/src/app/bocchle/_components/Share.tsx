@@ -29,12 +29,12 @@ import {
 import { Avatar } from "@rithik/bocchi-the-website/components/ui/avatar"
 import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import {
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogTitle,
-} from "@rithik/bocchi-the-website/components/ui/alert-dialog"
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@rithik/bocchi-the-website/components/ui/dialog"
 
 const shareUrl = `${env.NEXT_PUBLIC_WEBSITE_URL}/bocchle`
 
@@ -87,11 +87,11 @@ const FakeTweet = () => {
   )
 }
 
-interface DialogContentProps {
+interface ShareDialogContentProps {
   close: () => void
 }
 
-const DialogContent = (props: DialogContentProps) => {
+const ShareDialogContent = (props: ShareDialogContentProps) => {
   const { close } = props
   const [canShare, setCanShare] = useState(false)
   const xUrl = useAtomValue(xUrlAtom)
@@ -176,7 +176,7 @@ const Share = () => {
             <DrawerHeader>
               <DrawerTitle>Share</DrawerTitle>
             </DrawerHeader>
-            <DialogContent close={close} />
+            <ShareDialogContent close={close} />
             <DrawerFooter>
               <Button className="w-full" onClick={close}>
                 Close
@@ -185,19 +185,19 @@ const Share = () => {
           </DrawerContent>
         </Drawer>
       ) : (
-        <AlertDialog open={open} onOpenChange={setOpen}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Share</AlertDialogTitle>
-            </AlertDialogHeader>
-            <DialogContent close={close} />
-            <AlertDialogFooter>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Share</DialogTitle>
+            </DialogHeader>
+            <ShareDialogContent close={close} />
+            <DialogFooter>
               <Button className="w-full" onClick={close}>
                 Close
               </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )}
     </>
   )
