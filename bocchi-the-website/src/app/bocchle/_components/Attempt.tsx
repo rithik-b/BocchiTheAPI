@@ -8,7 +8,7 @@ const attemptVariants = cva(
       status: {
         correct: "bg-green-600",
         incorrect: "bg-red-600",
-        placeholder: "bg-pink-300 dark:bg-slate-600",
+        placeholder: "bg-pink-300 dark:bg-slate-600 text-black dark:text-white",
       },
     },
     defaultVariants: {
