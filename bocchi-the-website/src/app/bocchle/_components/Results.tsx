@@ -1,6 +1,7 @@
 import { api } from "@rithik/bocchi-the-website/trpc/react"
 import { useAtomValue } from "jotai"
 import GameStateAtoms from "../GameStateAtoms"
+import Share from "./Share"
 
 const Results = () => {
   const todaysDate = useAtomValue(GameStateAtoms.todaysDate)
@@ -19,6 +20,7 @@ const Results = () => {
       <span className="text-center text-2xl font-medium">
         See you next play! 🐧
       </span>
+      <Share />
     </div>
   )
 }

@@ -20,16 +20,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
-      <body className={cn("h-full", GeistSans.className)}>
-        <TRPCReactProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <div className="flex h-full flex-col bg-pink-100 dark:bg-slate-900">
-              <SiteHeader />
-              {children}
-              <SiteFooter />
-            </div>
-          </ThemeProvider>
-        </TRPCReactProvider>
+      <body
+        className={cn(
+          "flex h-full flex-col bg-pink-100 dark:bg-slate-900",
+          GeistSans.className,
+        )}
+      >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <TRPCReactProvider>
+            <SiteHeader />
+            {children}
+            <SiteFooter />
+          </TRPCReactProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

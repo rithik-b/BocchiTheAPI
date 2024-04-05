@@ -90,14 +90,14 @@ const BocchlePage = () => {
       <div className="flex w-full flex-col items-center md:max-w-[768px]">
         <ImageFrame src={currentFrame} />
       </div>
-      {!!currentFrame && (
-        <div
-          className={cn(
-            "flex h-full w-full flex-col items-center gap-5 px-5 sm:gap-2",
-            !gameEnded && "justify-between",
-          )}
-        >
-          <AttemptsHistory />
+      <div
+        className={cn(
+          "flex h-full w-full flex-col items-center gap-5 px-5 sm:gap-2",
+          !gameEnded && !!currentFrame && "justify-between",
+        )}
+      >
+        <AttemptsHistory placeholder={!currentFrame} />
+        {!!currentFrame && (
           <div
             className={cn(
               "flex h-full max-h-96 w-full flex-col items-center overflow-hidden duration-300",
@@ -116,9 +116,9 @@ const BocchlePage = () => {
               </Attempt>
             </Keypad>
           </div>
-          {gameEnded && <Results />}
-        </div>
-      )}
+        )}
+        {gameEnded && !!currentFrame && <Results />}
+      </div>
     </main>
   )
 }

@@ -17,7 +17,7 @@ interface Attempt {
   isCorrect: boolean
 }
 
-const attemptsHistory = atomWithStorage<Attempt[]>(
+const attemptsHistoryAtom = atomWithStorage<Attempt[]>(
   "attemptsHistory",
   [],
   undefined,
@@ -26,8 +26,29 @@ const attemptsHistory = atomWithStorage<Attempt[]>(
   },
 )
 
+interface AttemptWithPlaceholder {
+  attempt: string
+  status: "correct" | "incorrect" | "placeholder"
+}
+
+const attemptsHistoryWithPlaceHolders = atom((get) => {
+  const attemptsHistory = get(attemptsHistoryAtom)
+  const placeholderCount = 6 - attemptsHistory.length
+  const placeholders = Array.from({ length: placeholderCount }).map(() => ({
+    attempt: "",
+    status: "placeholder",
+  }))
+  return [
+    ...attemptsHistory.map((a) => ({
+      attempt: a.attempt,
+      status: a.isCorrect ? "correct" : "incorrect",
+    })),
+    ...placeholders,
+  ] as AttemptWithPlaceholder[]
+})
+
 const hasWon = atom((get) => {
-  const attempts = get(attemptsHistory)
+  const attempts = get(attemptsHistoryAtom)
   return attempts[attempts.length - 1]?.isCorrect ?? false
 })
 
@@ -41,7 +62,8 @@ const lastAttemptDate = atomWithStorage("lastAttemptDate", "", undefined, {
 
 const GameStateAtoms = {
   todaysDate,
-  attemptsHistory,
+  attemptsHistory: attemptsHistoryAtom,
+  attemptsHistoryWithPlaceHolders,
   unsuccessfulAttempts,
   hasWon,
   hasLost,
