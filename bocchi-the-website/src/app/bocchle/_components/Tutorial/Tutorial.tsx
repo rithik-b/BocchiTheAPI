@@ -15,19 +15,40 @@ import {
 } from "@rithik/bocchi-the-website/components/ui/drawer"
 import useMediaQuery from "@rithik/bocchi-the-website/lib/useMediaQuery"
 import { CircleHelp } from "lucide-react"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import TutorialContent from "./Tutorial.mdx"
+import { atomWithStorage } from "jotai/utils"
+import { useAtom } from "jotai"
 
 interface Props {
   className?: string
 }
 
+const hasSeenTutorialBeforeAtom = atomWithStorage(
+  "hasSeenTutorialBefore",
+  false,
+  undefined,
+  {
+    getOnInit: true,
+  },
+)
+
 const Tutorial = (props: Props) => {
   const { className } = props
   const [open, setOpen] = useState(false)
+  const [hasSeenTutorialBefore, setHasSeenTutorialBefore] = useAtom(
+    hasSeenTutorialBeforeAtom,
+  )
   const isDesktop = useMediaQuery("(min-width: 640px)")
 
   const close = useCallback(() => setOpen(false), [])
+
+  useEffect(() => {
+    if (!hasSeenTutorialBefore) {
+      setOpen(true)
+      setHasSeenTutorialBefore(true)
+    }
+  }, [hasSeenTutorialBefore, setHasSeenTutorialBefore])
 
   return (
     <>
