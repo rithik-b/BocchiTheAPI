@@ -41,6 +41,7 @@ const shareUrl = `${env.NEXT_PUBLIC_WEBSITE_URL}/bocchle`
 
 const shareMessageAtom = atom((get) => {
   const attempts = get(GameStateAtoms.attemptsHistoryWithPlaceHolders)
+
   const attemptsString = attempts
     .map((a) => {
       switch (a.status) {
@@ -53,7 +54,10 @@ const shareMessageAtom = atom((get) => {
       }
     })
     .join("")
-  return `Bocchle ${getDaysSinceStart()} \n` + attemptsString
+
+  const todaysDate = get(GameStateAtoms.todaysDate)
+
+  return `Bocchle ${getDaysSinceStart(todaysDate)} \n` + attemptsString
 })
 
 const shareMessageWithUrlAtom = atom((get) => {

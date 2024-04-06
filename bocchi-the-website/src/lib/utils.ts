@@ -20,7 +20,7 @@ export function getDateString(date: Date) {
   return `${year}-${month}-${day}`
 }
 
-export function getDaysSinceStart() {
+export function getDaysSinceStart(todaysDate: Date) {
   function dateToDays(dateString: string) {
     const date = new Date(dateString + "T00:00:00Z")
     return date.getTime() / (1000 * 60 * 60 * 24)
@@ -28,7 +28,7 @@ export function getDaysSinceStart() {
 
   return (
     Math.floor(
-      dateToDays(getDateString(new Date())) -
+      dateToDays(getDateString(todaysDate)) -
         dateToDays(env.NEXT_PUBLIC_START_DATE),
     ) + 1
   )

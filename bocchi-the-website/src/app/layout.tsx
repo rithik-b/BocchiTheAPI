@@ -7,6 +7,7 @@ import SiteFooter from "./_components/SiteFooter"
 import SiteHeader from "./_components/SiteHeader"
 import { cn } from "../lib/utils"
 import { Toaster } from "../components/ui/sonner"
+import JotaiProvider from "../components/JotaiProvider"
 
 export const metadata = {
   title: "Boccher",
@@ -29,10 +30,12 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TRPCReactProvider>
-            <SiteHeader />
-            {children}
-            <SiteFooter />
-            <Toaster />
+            <JotaiProvider>
+              <SiteHeader />
+              {children}
+              <SiteFooter />
+              <Toaster />
+            </JotaiProvider>
           </TRPCReactProvider>
         </ThemeProvider>
       </body>
