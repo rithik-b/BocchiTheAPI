@@ -3,15 +3,6 @@ import { atom } from "jotai/vanilla"
 
 const todaysDate = atom(new Date())
 
-const unsuccessfulAttempts = atomWithStorage(
-  "unsuccessfulAttempts",
-  0,
-  undefined,
-  {
-    getOnInit: true,
-  },
-)
-
 interface Attempt {
   attempt: string
   isCorrect: boolean
@@ -45,6 +36,11 @@ const attemptsHistoryWithPlaceHolders = atom((get) => {
     })),
     ...placeholders,
   ] as AttemptWithPlaceholder[]
+})
+
+const unsuccessfulAttempts = atom((get) => {
+  const attempts = get(attemptsHistoryAtom)
+  return attempts.filter((a) => !a.isCorrect).length
 })
 
 const hasWon = atom((get) => {

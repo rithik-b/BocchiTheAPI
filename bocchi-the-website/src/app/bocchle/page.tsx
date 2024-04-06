@@ -5,7 +5,7 @@ import ImageFrame from "../_components/ImageFrame"
 import { useCallback, useEffect, useState } from "react"
 import { useAtomCallback } from "jotai/utils"
 import { cn, getDateString } from "@rithik/bocchi-the-website/lib/utils"
-import { useAtom, useAtomValue, useSetAtom } from "jotai/react"
+import { useAtomValue, useSetAtom } from "jotai/react"
 import Keypad from "./_components/Keypad"
 import GameStateAtoms from "./GameStateAtoms"
 import AttemptsHistory from "./_components/AttemptsHistory"
@@ -22,7 +22,6 @@ const useResetAtomsOnNewDay = () => {
       const todaysDate = getDateString(get(GameStateAtoms.todaysDate))
       const lastAttemptDate = get(GameStateAtoms.lastAttemptDate)
       if (todaysDate !== lastAttemptDate) {
-        set(GameStateAtoms.unsuccessfulAttempts, 0)
         set(GameStateAtoms.attemptsHistory, [])
         set(GameStateAtoms.lastAttemptDate, todaysDate)
       }
@@ -44,9 +43,7 @@ const validateAnswer = (givenAnswer: string, actualAnswer: string) => {
 const BocchlePage = () => {
   useResetAtomsOnNewDay()
   const todaysDate = useAtomValue(GameStateAtoms.todaysDate)
-  const [unsuccessfulAttempts, setUnsuccessfulAttempts] = useAtom(
-    GameStateAtoms.unsuccessfulAttempts,
-  )
+  const unsuccessfulAttempts = useAtomValue(GameStateAtoms.unsuccessfulAttempts)
   const setAttemptsHistory = useSetAtom(GameStateAtoms.attemptsHistory)
   const gameEnded = useAtomValue(GameStateAtoms.gameEnded)
   const [answer, setAnswer] = useState("")
@@ -72,7 +69,6 @@ const BocchlePage = () => {
       setAnswerStatus("incorrect")
       setHasLoadedImage(false)
       setTimeout(() => {
-        setUnsuccessfulAttempts((a) => a + 1)
         setAttemptsHistory((h) => [...h, { attempt: answer, isCorrect: false }])
         setAnswer("")
         setAnswerStatus(undefined)

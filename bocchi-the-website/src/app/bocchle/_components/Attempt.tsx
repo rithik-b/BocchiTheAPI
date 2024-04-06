@@ -1,3 +1,4 @@
+import { cn } from "@rithik/bocchi-the-website/lib/utils"
 import { type VariantProps, cva } from "class-variance-authority"
 import { type HTMLProps, forwardRef } from "react"
 
@@ -26,10 +27,12 @@ const Attempt = forwardRef<HTMLDivElement, Props>((props, ref) => {
 
   return (
     <div
-      className={attemptVariants({
-        status,
-        className,
-      })}
+      className={cn(
+        attemptVariants({
+          status,
+          className,
+        }),
+      )}
       ref={ref}
       {...rest}
     />
