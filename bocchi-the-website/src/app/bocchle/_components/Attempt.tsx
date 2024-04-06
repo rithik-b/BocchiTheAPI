@@ -2,7 +2,7 @@ import { type VariantProps, cva } from "class-variance-authority"
 import { type HTMLProps, forwardRef } from "react"
 
 const attemptVariants = cva(
-  "flex size-8 items-center justify-center rounded-md p-1 text-white text-sm transition-all",
+  "flex size-8 items-center justify-center rounded-md p-1 text-white text-sm transition-colors",
   {
     variants: {
       status: {
