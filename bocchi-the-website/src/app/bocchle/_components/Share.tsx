@@ -76,7 +76,7 @@ const FakeTweet = () => {
           <AvatarImage src="https://pbs.twimg.com/profile_images/1164155338980904960/LZq_sIDy_400x400.jpg" />
           <AvatarFallback>gh</AvatarFallback>
         </Avatar>
-        <CardHeader className="p-0">
+        <CardHeader className="gap-1 p-0">
           <CardTitle>guitarhero</CardTitle>
           <CardDescription>@guitarhero_0221</CardDescription>
         </CardHeader>
