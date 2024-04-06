@@ -35,6 +35,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@rithik/bocchi-the-website/components/ui/dialog"
+import { toast } from "sonner"
 
 const shareUrl = `${env.NEXT_PUBLIC_WEBSITE_URL}/bocchle`
 
@@ -102,6 +103,7 @@ const ShareDialogContent = (props: ShareDialogContentProps) => {
         const shareMessage = get(shareMessageWithUrlAtom)
         await navigator.clipboard.writeText(shareMessage)
         close()
+        toast("Copied to clipboard")
       },
       [close],
     ),

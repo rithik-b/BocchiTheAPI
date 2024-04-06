@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes"
 import SiteFooter from "./_components/SiteFooter"
 import SiteHeader from "./_components/SiteHeader"
 import { cn } from "../lib/utils"
+import { Toaster } from "../components/ui/sonner"
 
 export const metadata = {
   title: "Boccher",
@@ -31,6 +32,7 @@ export default function RootLayout({
             <SiteHeader />
             {children}
             <SiteFooter />
+            <Toaster />
           </TRPCReactProvider>
         </ThemeProvider>
       </body>
