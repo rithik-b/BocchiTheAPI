@@ -30,13 +30,13 @@ function SiteHeader() {
         >
           <Link
             className={cn(
-              "flex items-center gap-1 text-2xl font-bold tracking-tight",
+              "flex w-full items-center justify-center gap-1 text-center text-5xl font-bold tracking-tight sm:text-3xl",
               linkStyles,
             )}
             href="/bocchle"
             onClick={() => setIsMenuOpen(false)}
           >
-            <Gamepad />
+            <Gamepad className="size-14 sm:size-8" />
             Bocchle
           </Link>
         </SheetContent>
