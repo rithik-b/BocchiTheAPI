@@ -3,7 +3,6 @@ import "@rithik/bocchi-the-website/styles/globals.css"
 import { TRPCReactProvider } from "@rithik/bocchi-the-website/trpc/react"
 import { GeistSans } from "geist/font/sans"
 import { ThemeProvider } from "next-themes"
-import SiteFooter from "./_components/SiteFooter"
 import SiteHeader from "./_components/SiteHeader"
 import { cn } from "../lib/utils"
 import { Toaster } from "../components/ui/sonner"
@@ -35,7 +34,6 @@ export default function RootLayout({
             <JotaiProvider>
               <SiteHeader />
               {children}
-              <SiteFooter />
               <Toaster />
             </JotaiProvider>
           </TRPCReactProvider>
