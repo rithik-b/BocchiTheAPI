@@ -1,8 +1,9 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { motion, useAnimation } from "framer-motion"
 
 const VictoryAnimation = () => {
   const controls = useAnimation()
+  const [animationFinished, setAnimationFinished] = useState(false)
 
   useEffect(() => {
     const animateConfetti = async () => {
@@ -13,10 +14,13 @@ const VictoryAnimation = () => {
           ease: "linear",
         },
       })
+      setAnimationFinished(true)
     }
 
     void animateConfetti()
   }, [controls])
+
+  if (animationFinished) return null
 
   return (
     <div className="left-1/8 fixed top-0 z-10 h-full w-3/4">
