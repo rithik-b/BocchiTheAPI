@@ -11,7 +11,10 @@ import GameStateAtoms from "./GameStateAtoms"
 import AttemptsHistory from "./_components/AttemptsHistory"
 import Results from "./_components/Results"
 import Attempt from "./_components/Attempt"
-import { Episode, edToEpisodes } from "@rithik/bocchi-the-website/data/episode"
+import {
+  type Episode,
+  edToEpisodes,
+} from "@rithik/bocchi-the-website/data/episode"
 
 const useResetAtomsOnNewDay = () => {
   const resetAtomsIfNeeded = useAtomCallback(
@@ -50,6 +53,7 @@ const BocchlePage = () => {
   const [answerStatus, setAnswerStatus] = useState<
     "correct" | "incorrect" | undefined
   >(undefined)
+  const [hasLoadedImage, setHasLoadedImage] = useState(false)
 
   const { data: currentFrame } = api.bocchle.todaysFrames.useQuery({
     todaysDate,
@@ -63,8 +67,10 @@ const BocchlePage = () => {
       answer,
       (currentFrame?.episode as string) ?? "",
     )
+
     if (!isCorrect) {
       setAnswerStatus("incorrect")
+      setHasLoadedImage(false)
       setTimeout(() => {
         setUnsuccessfulAttempts((a) => a + 1)
         setAttemptsHistory((h) => [...h, { attempt: answer, isCorrect: false }])
@@ -86,7 +92,10 @@ const BocchlePage = () => {
   return (
     <main className="flex h-full flex-col items-center gap-5 pb-4">
       <div className="flex w-full flex-col items-center md:max-w-[768px]">
-        <ImageFrame src={currentFrame?.url} />
+        <ImageFrame
+          src={currentFrame?.url}
+          onLoad={() => setHasLoadedImage(true)}
+        />
       </div>
       <div
         className={cn(
@@ -102,7 +111,11 @@ const BocchlePage = () => {
               gameEnded && "max-h-0",
             )}
           >
-            <Keypad value={answer} onChange={setAnswer}>
+            <Keypad
+              value={answer}
+              onChange={setAnswer}
+              disabled={!hasLoadedImage}
+            >
               <Attempt
                 className={cn(
                   answerStatus === "incorrect" && "animate-shake",
