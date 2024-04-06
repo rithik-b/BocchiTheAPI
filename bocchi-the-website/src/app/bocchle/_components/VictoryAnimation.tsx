@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from "react"
-import { motion, useAnimation } from "framer-motion"
+import { motion, useAnimation, useReducedMotion } from "framer-motion"
 
 const VictoryAnimation = () => {
   const controls = useAnimation()
   const [animationFinished, setAnimationFinished] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
     const animateConfetti = async () => {
-      await controls.start({
-        y: [0, 1000],
-        transition: {
-          duration: 1.5,
-          ease: "linear",
-        },
-      })
+      if (!prefersReducedMotion)
+        await controls.start({
+          y: [0, 1000],
+          transition: {
+            duration: 1.5,
+            ease: "linear",
+          },
+        })
+
       setAnimationFinished(true)
     }
 
     void animateConfetti()
-  }, [controls])
+  }, [controls, prefersReducedMotion])
 
   if (animationFinished) return null
 
