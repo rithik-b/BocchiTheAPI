@@ -1,9 +1,4 @@
-import {
-  type Episode,
-  episodes,
-  edToEpisodes,
-  formattedEpisodes,
-} from "@rithik/bocchi-the-website/data/episode"
+import { type Episode, episodes } from "@rithik/bocchi-the-website/data/episode"
 import {
   createTRPCRouter,
   publicProcedure,
@@ -77,25 +72,10 @@ export const bocchleRouter = createTRPCRouter({
         offset: randomFrameIndex,
       })
 
-      return `img/${randomFrame?.id}.png`
-    }),
-  validateAnswer: bocchleProcedure
-    .input(z.object({ todaysDate: z.date(), answer: z.string() }))
-    .mutation(async ({ input, ctx }) => {
-      const { answer } = input
-      const sanitizedAnswer = answer.replace(/^0+/, "")
-      const { randomEpisode } = ctx
-      const episodesForEd = edToEpisodes.get(randomEpisode as string)
-      return (
-        sanitizedAnswer === randomEpisode ||
-        (episodesForEd?.includes(sanitizedAnswer) ?? false)
-      )
-    }),
-  // Yes this can be cheated but this game is for fun and I need to show the answer to the player eventually
-  getAnswer: bocchleProcedure
-    .input(z.object({ todaysDate: z.date() }))
-    .query(({ ctx }) => {
-      const { randomEpisode } = ctx
-      return formattedEpisodes.get(randomEpisode as Episode)
+      return {
+        url: `img/${randomFrame?.id}.png`,
+        // Yes this can be cheated but this game is for fun and I need to show the answer to the player eventually
+        episode: randomEpisode,
+      }
     }),
 })

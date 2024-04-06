@@ -11,6 +11,7 @@ import GameStateAtoms from "./GameStateAtoms"
 import AttemptsHistory from "./_components/AttemptsHistory"
 import Results from "./_components/Results"
 import Attempt from "./_components/Attempt"
+import { Episode, edToEpisodes } from "@rithik/bocchi-the-website/data/episode"
 
 const useResetAtomsOnNewDay = () => {
   const resetAtomsIfNeeded = useAtomCallback(
@@ -26,6 +27,15 @@ const useResetAtomsOnNewDay = () => {
   )
 
   useEffect(() => resetAtomsIfNeeded(), [resetAtomsIfNeeded])
+}
+
+const validateAnswer = (givenAnswer: string, actualAnswer: string) => {
+  const sanitizedAnswer = givenAnswer.replace(/^0+/, "")
+  const episodesForEd = edToEpisodes.get(actualAnswer)
+  return (
+    sanitizedAnswer === actualAnswer ||
+    (episodesForEd?.includes(sanitizedAnswer) ?? false)
+  )
 }
 
 const BocchlePage = () => {
@@ -45,42 +55,30 @@ const BocchlePage = () => {
     todaysDate,
     attempt: unsuccessfulAttempts > 5 ? 5 : unsuccessfulAttempts,
   })
-  const { mutateAsync: validateAsync } =
-    api.bocchle.validateAnswer.useMutation()
 
   useEffect(() => {
     if (answer.length !== 2) return
 
-    const validateAnswer = async () => {
-      const isCorrect = await validateAsync({
-        todaysDate,
-        answer,
-      })
-      if (!isCorrect) {
-        setAnswerStatus("incorrect")
-        setTimeout(() => {
-          setUnsuccessfulAttempts((a) => a + 1)
-          setAttemptsHistory((h) => [
-            ...h,
-            { attempt: answer, isCorrect: false },
-          ])
-          setAnswer("")
-          setAnswerStatus(undefined)
-        }, 1500)
-      } else {
-        setAnswerStatus("correct")
-        setTimeout(() => {
-          setAttemptsHistory((h) => [
-            ...h,
-            { attempt: answer, isCorrect: true },
-          ])
-          setAnswer("")
-          setAnswerStatus(undefined)
-        }, 1500)
-      }
+    const isCorrect = validateAnswer(
+      answer,
+      (currentFrame?.episode as string) ?? "",
+    )
+    if (!isCorrect) {
+      setAnswerStatus("incorrect")
+      setTimeout(() => {
+        setUnsuccessfulAttempts((a) => a + 1)
+        setAttemptsHistory((h) => [...h, { attempt: answer, isCorrect: false }])
+        setAnswer("")
+        setAnswerStatus(undefined)
+      }, 1500)
+    } else {
+      setAnswerStatus("correct")
+      setTimeout(() => {
+        setAttemptsHistory((h) => [...h, { attempt: answer, isCorrect: true }])
+        setAnswer("")
+        setAnswerStatus(undefined)
+      }, 1500)
     }
-
-    void validateAnswer()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answer])
@@ -88,7 +86,7 @@ const BocchlePage = () => {
   return (
     <main className="flex h-full flex-col items-center gap-5 pb-4">
       <div className="flex w-full flex-col items-center md:max-w-[768px]">
-        <ImageFrame src={currentFrame} />
+        <ImageFrame src={currentFrame?.url} />
       </div>
       <div
         className={cn(
@@ -117,7 +115,9 @@ const BocchlePage = () => {
             </Keypad>
           </div>
         )}
-        {gameEnded && !!currentFrame && <Results />}
+        {gameEnded && !!currentFrame && (
+          <Results answer={currentFrame.episode as Episode} />
+        )}
       </div>
     </main>
   )
