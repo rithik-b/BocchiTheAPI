@@ -37,14 +37,16 @@ const Tutorial = (props: Props) => {
         onClick={() => setOpen(!open)}
       >
         <CircleHelp className="size-5" />
+        <span className="sr-only">How to play</span>
       </Button>
       {!isDesktop ? (
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerContent>
-            <DrawerHeader>
+            <DrawerHeader className="flex w-full justify-center gap-1">
+              <CircleHelp className="size-5" />
               <DrawerTitle>How to play</DrawerTitle>
             </DrawerHeader>
-            <div className="flex flex-col gap-1.5 px-4">
+            <div className="flex flex-col gap-4 px-4">
               <TutorialContent />
             </div>
             <DrawerFooter>
@@ -57,7 +59,8 @@ const Tutorial = (props: Props) => {
       ) : (
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent>
-            <DialogHeader>
+            <DialogHeader className="flex flex-row items-center gap-1 space-y-0">
+              <CircleHelp className="size-5" />
               <DialogTitle>How to play</DialogTitle>
             </DialogHeader>
             <TutorialContent />
