@@ -15,6 +15,7 @@ import {
   type Episode,
   edToEpisodes,
 } from "@rithik/bocchi-the-website/data/episode"
+import VictoryAnimation from "./_components/VictoryAnimation"
 
 const useResetAtomsOnNewDay = () => {
   const resetAtomsIfNeeded = useAtomCallback(
@@ -51,6 +52,7 @@ const BocchlePage = () => {
     "correct" | "incorrect" | undefined
   >(undefined)
   const [hasLoadedImage, setHasLoadedImage] = useState(false)
+  const [playAnimation, setPlayAnimation] = useState(false)
 
   const { data: currentFrame } = api.bocchle.todaysFrames.useQuery({
     todaysDate,
@@ -79,6 +81,7 @@ const BocchlePage = () => {
         setAttemptsHistory((h) => [...h, { attempt: answer, isCorrect: true }])
         setAnswer("")
         setAnswerStatus(undefined)
+        setPlayAnimation(true)
       }, 1500)
     }
 
@@ -87,6 +90,7 @@ const BocchlePage = () => {
 
   return (
     <main className="flex h-full flex-col items-center gap-5 pb-4">
+      {playAnimation && <VictoryAnimation />}
       <div className="flex w-full flex-col items-center md:max-w-[768px]">
         <ImageFrame
           src={currentFrame?.url}
