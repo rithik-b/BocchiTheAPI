@@ -11,7 +11,7 @@ import {
   DrawerTitle,
 } from "@rithik/bocchi-the-website/components/ui/drawer"
 import useMediaQuery from "@rithik/bocchi-the-website/lib/useMediaQuery"
-import { cn } from "@rithik/bocchi-the-website/lib/utils"
+import { cn, getDaysSinceStart } from "@rithik/bocchi-the-website/lib/utils"
 import { atom, useAtomValue } from "jotai"
 import { Copy, MoreHorizontal, ShareIcon } from "lucide-react"
 import { forwardRef, useCallback, useEffect, useState } from "react"
@@ -52,7 +52,7 @@ const shareMessageAtom = atom((get) => {
       }
     })
     .join("")
-  return "Bocchle \n" + attemptsString
+  return `Bocchle ${getDaysSinceStart()} \n` + attemptsString
 })
 
 const shareMessageWithUrlAtom = atom((get) => {

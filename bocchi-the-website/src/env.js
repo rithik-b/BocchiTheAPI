@@ -26,6 +26,7 @@ export const env = createEnv({
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
     NEXT_PUBLIC_WEBSITE_URL: z.string(),
+    NEXT_PUBLIC_START_DATE: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   },
 
   /**
@@ -36,6 +37,7 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_WEBSITE_URL: process.env.NEXT_PUBLIC_WEBSITE_URL,
+    NEXT_PUBLIC_START_DATE: process.env.NEXT_PUBLIC_START_DATE,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
