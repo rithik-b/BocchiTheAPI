@@ -120,7 +120,7 @@ const BocchlePage = () => {
               <Attempt
                 className={cn(
                   answerStatus === "incorrect" && "animate-shake",
-                  "h-full max-h-16 w-full sm:h-8",
+                  "h-full max-h-16 min-h-8 w-full sm:h-8",
                 )}
                 status={answerStatus}
               >

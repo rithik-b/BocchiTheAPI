@@ -24,7 +24,9 @@ export default function RootLayout({
     <html lang="en" className="h-full" suppressHydrationWarning>
       <body
         className={cn(
-          "flex h-full flex-col bg-pink-100 dark:bg-slate-900",
+          // have to make h full important because of vaul changing the body to h auto
+          // https://github.com/emilkowalski/vaul/blob/a30da7d1618afd8b33637982695f0676130346ff/src/use-position-fixed.ts#L38
+          "flex !h-full flex-col bg-pink-100 dark:bg-slate-900",
           GeistSans.className,
         )}
       >
