@@ -9,7 +9,7 @@ const VictoryAnimation = () => {
       await controls.start({
         y: [0, 1000],
         transition: {
-          duration: 1,
+          duration: 1.5,
           ease: "linear",
         },
       })
