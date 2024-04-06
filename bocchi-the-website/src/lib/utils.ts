@@ -12,5 +12,5 @@ export function formatDuration(duration: number) {
 }
 
 export function getDateString(date: Date) {
-  return `${date.getFullYear()}${date.getUTCMonth()}${date.getDate()}`
+  return `${date.getUTCFullYear()}${date.getUTCMonth()}${date.getUTCDate()}`
 }
