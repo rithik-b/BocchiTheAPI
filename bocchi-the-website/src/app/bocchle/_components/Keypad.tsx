@@ -1,8 +1,13 @@
 import { Button } from "@rithik/bocchi-the-website/components/ui/button"
 import { cn } from "@rithik/bocchi-the-website/lib/utils"
 import { Delete } from "lucide-react"
-import { type SetStateAction, type Dispatch, PropsWithChildren } from "react"
+import {
+  type SetStateAction,
+  type Dispatch,
+  type PropsWithChildren,
+} from "react"
 import { useEffect } from "react"
+import Tutorial from "./Tutorial/Tutorial"
 
 type Props = PropsWithChildren<{
   value: string
@@ -127,7 +132,7 @@ const Keypad = (props: Props) => {
         >
           9
         </Button>
-        <div></div>
+        <Tutorial className={keyButtonStyle} />
         <Button
           className={keyButtonStyle}
           onClick={() => onChange((v) => `${v}0`)}
