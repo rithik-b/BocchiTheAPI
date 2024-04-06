@@ -16,11 +16,11 @@ const bocchleEpisodes: Omit<Episode, "op">[] = episodes.filter(
 )
 
 const bocchleProcedure = publicProcedure
-  .input(z.object({ todaysDate: z.date() }))
+  .input(z.object({ todaysDate: z.date(), timezoneOffset: z.number() }))
   .use(({ input, next }) => {
-    const { todaysDate } = input
+    const { todaysDate, timezoneOffset } = input
 
-    const episodeSeed = getDateString(todaysDate)
+    const episodeSeed = getDateString(todaysDate, timezoneOffset)
     const randomEpisode =
       bocchleEpisodes[
         Math.round(
@@ -38,9 +38,7 @@ const bocchleProcedure = publicProcedure
 
 export const bocchleRouter = createTRPCRouter({
   todaysFrames: bocchleProcedure
-    .input(
-      z.object({ todaysDate: z.date(), attempt: z.number().min(0).max(5) }),
-    )
+    .input(z.object({ attempt: z.number().min(0).max(5) }))
     .query(async ({ input, ctx }) => {
       const { attempt } = input
       const { episodeSeed, randomEpisode } = ctx

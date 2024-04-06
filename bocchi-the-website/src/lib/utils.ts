@@ -12,8 +12,7 @@ export function formatDuration(duration: number) {
   return `${minutes}:${seconds.toString().padStart(2, "0")}`
 }
 
-export function getDateString(date: Date) {
-  const offset = date.getTimezoneOffset()
+export function getDateString(date: Date, offset: number) {
   date = new Date(date.getTime() - offset * 60 * 1000) // Need to adjust for timezone offset
   const day = String(date.getUTCDate()).padStart(2, "0")
   const month = String(date.getUTCMonth() + 1).padStart(2, "0") // Months are 0-based, so we add 1
@@ -30,7 +29,7 @@ export function getDaysSinceStart(todaysDate: Date) {
 
   return (
     Math.floor(
-      dateToDays(getDateString(todaysDate)) -
+      dateToDays(getDateString(todaysDate, todaysDate.getTimezoneOffset())) -
         dateToDays(env.NEXT_PUBLIC_START_DATE),
     ) + 1
   )

@@ -20,11 +20,15 @@ import VictoryAnimation from "./_components/VictoryAnimation"
 const useResetAtomsOnNewDay = () => {
   const resetAtomsIfNeeded = useAtomCallback(
     useCallback((get, set) => {
-      const todaysDate = getDateString(get(GameStateAtoms.todaysDate))
+      const todaysDate = get(GameStateAtoms.todaysDate)
+      const todaysDateString = getDateString(
+        todaysDate,
+        todaysDate.getTimezoneOffset(),
+      )
       const lastAttemptDate = get(GameStateAtoms.lastAttemptDate)
-      if (todaysDate !== lastAttemptDate) {
+      if (todaysDateString !== lastAttemptDate) {
         set(GameStateAtoms.attemptsHistory, [])
-        set(GameStateAtoms.lastAttemptDate, todaysDate)
+        set(GameStateAtoms.lastAttemptDate, todaysDateString)
       }
     }, []),
   )
@@ -56,6 +60,7 @@ const BocchlePage = () => {
 
   const { data: currentFrame } = api.bocchle.todaysFrames.useQuery({
     todaysDate,
+    timezoneOffset: todaysDate.getTimezoneOffset(),
     attempt: unsuccessfulAttempts > 5 ? 5 : unsuccessfulAttempts,
   })
 
