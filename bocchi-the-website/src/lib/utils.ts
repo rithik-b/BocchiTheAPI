@@ -13,6 +13,8 @@ export function formatDuration(duration: number) {
 }
 
 export function getDateString(date: Date) {
+  const offset = date.getTimezoneOffset()
+  date = new Date(date.getTime() - offset * 60 * 1000) // Need to adjust for timezone offset
   const day = String(date.getUTCDate()).padStart(2, "0")
   const month = String(date.getUTCMonth() + 1).padStart(2, "0") // Months are 0-based, so we add 1
   const year = date.getUTCFullYear()

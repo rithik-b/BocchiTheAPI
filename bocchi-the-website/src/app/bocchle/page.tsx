@@ -16,7 +16,6 @@ import {
   edToEpisodes,
 } from "@rithik/bocchi-the-website/data/episode"
 import VictoryAnimation from "./_components/VictoryAnimation"
-import Tutorial from "./_components/Tutorial/Tutorial"
 
 const useResetAtomsOnNewDay = () => {
   const resetAtomsIfNeeded = useAtomCallback(
