@@ -37,7 +37,7 @@ import {
   DialogTitle,
 } from "@rithik/bocchi-the-website/components/ui/dialog"
 import { toast } from "sonner"
-import thumbnail from "@public/bocchle-thumbnail.webp"
+import thumbnail from "@public/static/bocchle-thumbnail.webp"
 import Image from "next/image"
 
 const shareUrl = `${env.NEXT_PUBLIC_WEBSITE_URL}/bocchle`

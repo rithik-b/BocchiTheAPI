@@ -12,7 +12,7 @@ export const metadata = {
       "Guess the Bocchi the Rock episode! Get a random frame from the anime and try to guess the episode it's from!",
     images: [
       {
-        url: "/bocchle-thumbnail.webp",
+        url: "/static/bocchle-thumbnail.webp",
       },
     ],
   },
