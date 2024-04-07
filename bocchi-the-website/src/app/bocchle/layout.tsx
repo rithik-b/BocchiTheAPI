@@ -8,8 +8,6 @@ export const metadata = {
   openGraph: {
     type: "website",
     title: "Bocchle - Guess the Bocchi the Rock episode!",
-    description:
-      "Guess the Bocchi the Rock episode! Get a random frame from the anime and try to guess the episode it's from!",
     images: [
       {
         url: "/static/bocchle-thumbnail.webp",
