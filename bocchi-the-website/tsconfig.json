@@ -26,7 +26,8 @@
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {
-      "@rithik/bocchi-the-website/*": ["./src/*"]
+      "@rithik/bocchi-the-website/*": ["./src/*"],
+      "@public/*": ["./public/*"]
     }
   },
   "include": [

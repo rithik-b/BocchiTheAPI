@@ -23,6 +23,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@rithik/bocchi-the-website/components/ui/card"
@@ -36,6 +37,8 @@ import {
   DialogTitle,
 } from "@rithik/bocchi-the-website/components/ui/dialog"
 import { toast } from "sonner"
+import thumbnail from "@public/bocchle-thumbnail.webp"
+import Image from "next/image"
 
 const shareUrl = `${env.NEXT_PUBLIC_WEBSITE_URL}/bocchle`
 
@@ -71,7 +74,7 @@ const xUrlAtom = atom((get) => {
 })
 
 const FakeTweet = () => {
-  const shareMessageWithUrl = useAtomValue(shareMessageWithUrlAtom)
+  const shareMessage = useAtomValue(shareMessageAtom)
 
   return (
     <Card>
@@ -86,8 +89,16 @@ const FakeTweet = () => {
         </CardHeader>
       </div>
       <CardContent>
-        <p className="whitespace-pre-line break-words">{shareMessageWithUrl}</p>
+        <p className="whitespace-pre-line break-words">{shareMessage}</p>
       </CardContent>
+      <CardFooter>
+        <div className="relative overflow-hidden rounded-md">
+          <Image src={thumbnail} alt="Bocchle Thumbnail" />
+          <div className="absolute bottom-0 w-full bg-black/50 px-2 text-sm text-white">
+            Bocchle - Guess the Bocchi the Rock episode!
+          </div>
+        </div>
+      </CardFooter>
     </Card>
   )
 }
