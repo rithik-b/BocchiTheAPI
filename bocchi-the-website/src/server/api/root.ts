@@ -1,24 +1,28 @@
-import { createTRPCRouter, publicProcedure } from "./trpc"
-import { z } from "zod"
-import { env } from "@env/server.mjs"
+import { framesRouter } from "@rithik/bocchi-the-website/server/api/routers/frames"
+import {
+  createCallerFactory,
+  createTRPCRouter,
+} from "@rithik/bocchi-the-website/server/api/trpc"
+import { bocchleRouter } from "./routers/bocchle"
 
 /**
  * This is the primary router for your server.
  *
- * All routers added in /api/routers should be manually added here
+ * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  frame: publicProcedure.input(z.ostring()).query(({ input }) => {
-    const apiRoute = `${env.INTERNAL_API_URL}/api/internal?apiUrl=${
-      env.API_URL
-    }${!input ? "" : `&episode=${input}`}`
-    return fetch(apiRoute).then((res) => res.json()) as Promise<FrameResponse>
-  }),
+  frames: framesRouter,
+  bocchle: bocchleRouter,
 })
-
-interface FrameResponse {
-  url: string
-}
 
 // export type definition of API
 export type AppRouter = typeof appRouter
+
+/**
+ * Create a server-side caller for the tRPC API.
+ * @example
+ * const trpc = createCaller(createContext);
+ * const res = await trpc.post.all();
+ *       ^? Post[]
+ */
+export const createCaller = createCallerFactory(appRouter)
