@@ -94,7 +94,7 @@ const FakeTweet = () => {
       <CardFooter>
         <div className="relative overflow-hidden rounded-md">
           <Image src={thumbnail} alt="Bocchle Thumbnail" />
-          <div className="absolute bottom-0 w-full bg-black/50 px-2 text-sm text-white">
+          <div className="absolute bottom-0 w-full bg-black/50 px-2 py-1 text-xs text-white">
             Bocchle - Guess the Bocchi the Rock episode!
           </div>
         </div>
