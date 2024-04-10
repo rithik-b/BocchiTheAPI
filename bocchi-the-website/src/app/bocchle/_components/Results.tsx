@@ -3,6 +3,7 @@ import GameStateAtoms from "../GameStateAtoms"
 import { formattedEpisodes } from "@rithik/bocchi-the-website/data/episode"
 import { memo } from "react"
 import { unwrap } from "jotai/utils"
+import Share from "./Share"
 
 const Results = () => {
   const answer = useAtomValue(unwrap(GameStateAtoms.answer))!
@@ -18,6 +19,7 @@ const Results = () => {
       <span className="text-center text-2xl font-medium">
         See you next play! 🐧
       </span>
+      <Share />
     </div>
   )
 }
