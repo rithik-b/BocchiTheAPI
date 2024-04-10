@@ -11,6 +11,7 @@ import { formattedEpisodes } from "@rithik/bocchi-the-website/data/episode"
 import { formatDuration } from "@rithik/bocchi-the-website/lib/utils"
 import { atom, useAtom } from "jotai"
 import { type AppRouter } from "@rithik/bocchi-the-website/server/api/root"
+import { unwrap } from "jotai/utils"
 
 interface Props {
   firstFrame: inferRouterOutputs<AppRouter>["randomFrame"]
@@ -26,7 +27,9 @@ const RandomFrame = (props: Props) => {
     () =>
       atom(
         (get) =>
-          get(hasRefetchedAtom) ? get(randomFrameQueryAtom) : firstFrame,
+          get(hasRefetchedAtom)
+            ? get(unwrap(randomFrameQueryAtom))
+            : firstFrame,
         (get, set) => {
           if (get(hasRefetchedAtom)) set(randomFrameQueryAtom)
           else set(hasRefetchedAtom, true)
@@ -39,9 +42,10 @@ const RandomFrame = (props: Props) => {
   const metadata = useMemo(
     () => (isLoading ? previousFrame : currentFrame),
     [currentFrame, isLoading, previousFrame],
-  )
+  )!
 
   const onClick = () => {
+    if (!currentFrame) return
     setPreviousFrame(currentFrame)
     setIsLoading(true)
     refetch()
@@ -51,7 +55,7 @@ const RandomFrame = (props: Props) => {
     <main className="flex flex-col items-center gap-5">
       <div className="flex w-full flex-col items-center gap-2 lg:max-w-[1024px]">
         <ImageFrame
-          src={currentFrame.url}
+          src={currentFrame?.url ?? previousFrame?.url}
           onLoad={() => setIsLoading(false)}
           alt={`Bocchi the Rock! ${formattedEpisodes.get(metadata.source)} ${formatDuration(metadata.timestamp)}`}
         />
