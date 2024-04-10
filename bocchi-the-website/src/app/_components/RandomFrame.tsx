@@ -35,8 +35,14 @@ const RandomFrame = (props: Props) => {
     [firstFrame],
   )
   const [currentFrame, refetch] = useAtom(randomFrameAtom)
+  const [previousFrame, setPreviousFrame] = useState(currentFrame)
+  const metadata = useMemo(
+    () => (isLoading ? previousFrame : currentFrame),
+    [currentFrame, isLoading, previousFrame],
+  )
 
   const onClick = () => {
+    setPreviousFrame(currentFrame)
     setIsLoading(true)
     refetch()
   }
@@ -47,12 +53,12 @@ const RandomFrame = (props: Props) => {
         <ImageFrame
           src={currentFrame.url}
           onLoad={() => setIsLoading(false)}
-          alt={`Bocchi the Rock! ${formattedEpisodes.get(currentFrame.source)} ${formatDuration(currentFrame.timestamp)}`}
+          alt={`Bocchi the Rock! ${formattedEpisodes.get(metadata.source)} ${formatDuration(metadata.timestamp)}`}
         />
         <EpisodeDuration
-          episode={currentFrame.source}
-          timestamp={currentFrame.timestamp}
-          episodeDuration={currentFrame.episodeDuration}
+          episode={metadata.source}
+          timestamp={metadata.timestamp}
+          episodeDuration={metadata.episodeDuration}
         />
       </div>
       <Button onClick={onClick} disabled={isLoading}>
