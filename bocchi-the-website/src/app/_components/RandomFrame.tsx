@@ -2,32 +2,43 @@
 
 import { Loader2 } from "lucide-react"
 import { Button } from "@rithik/bocchi-the-website/components/ui/button"
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import EpisodeDuration from "./EpisodeDuration"
 import ImageFrame from "./ImageFrame"
 import { api } from "@rithik/bocchi-the-website/trpc/react"
 import { type inferRouterOutputs } from "@trpc/server"
-import { type framesRouter } from "@rithik/bocchi-the-website/server/api/routers/frames"
 import { formattedEpisodes } from "@rithik/bocchi-the-website/data/episode"
 import { formatDuration } from "@rithik/bocchi-the-website/lib/utils"
+import { atom, useAtom } from "jotai"
+import { type AppRouter } from "@rithik/bocchi-the-website/server/api/root"
 
 interface Props {
-  firstFrame: inferRouterOutputs<typeof framesRouter>["randomFrame"]
+  firstFrame: inferRouterOutputs<AppRouter>["randomFrame"]
 }
+
+const randomFrameQueryAtom = api.randomFrame.atomWithQuery(undefined)
+const hasRefetchedAtom = atom(false)
 
 const RandomFrame = (props: Props) => {
   const { firstFrame } = props
   const [isLoading, setIsLoading] = useState(false)
-  const { data: currentFrame, refetch } = api.frames.randomFrame.useQuery(
-    undefined,
-    {
-      initialData: firstFrame,
-    },
+  const randomFrameAtom = useMemo(
+    () =>
+      atom(
+        (get) =>
+          get(hasRefetchedAtom) ? get(randomFrameQueryAtom) : firstFrame,
+        (get, set) => {
+          if (get(hasRefetchedAtom)) set(randomFrameQueryAtom)
+          else set(hasRefetchedAtom, true)
+        },
+      ),
+    [firstFrame],
   )
+  const [currentFrame, refetch] = useAtom(randomFrameAtom)
 
   const onClick = () => {
     setIsLoading(true)
-    void refetch()
+    refetch()
   }
 
   return (

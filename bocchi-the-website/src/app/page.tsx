@@ -5,7 +5,7 @@ import { api } from "../trpc/server"
 export const dynamic = "force-dynamic"
 
 const Home = async () => {
-  const firstFrame = await api.frames.randomFrame()
+  const firstFrame = await api.randomFrame()
   return <RandomFrame firstFrame={firstFrame} />
 }
 

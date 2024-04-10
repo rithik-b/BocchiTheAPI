@@ -1,9 +1,11 @@
-import { framesRouter } from "@rithik/bocchi-the-website/server/api/routers/frames"
 import {
   createCallerFactory,
   createTRPCRouter,
+  publicProcedure,
 } from "@rithik/bocchi-the-website/server/api/trpc"
-import { bocchleRouter } from "./routers/bocchle"
+import { bocchleRouter } from "@rithik/bocchi-the-website/server/api/routers/bocchle"
+import { z } from "zod"
+import getRandomFrame from "../getRandomFrame"
 
 /**
  * This is the primary router for your server.
@@ -11,8 +13,10 @@ import { bocchleRouter } from "./routers/bocchle"
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  frames: framesRouter,
-  bocchle: bocchleRouter,
+  randomFrame: publicProcedure.input(z.ostring()).query(({ input }) => {
+    return getRandomFrame(input)
+  }),
+  bocchle: bocchleRouter.todaysFrames,
 })
 
 // export type definition of API

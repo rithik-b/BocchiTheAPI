@@ -1,18 +1,13 @@
 import { useAtomValue } from "jotai"
 import GameStateAtoms from "../GameStateAtoms"
-import Share from "./Share"
-import {
-  formattedEpisodes,
-  type Episode,
-} from "@rithik/bocchi-the-website/data/episode"
+import { formattedEpisodes } from "@rithik/bocchi-the-website/data/episode"
 import { memo } from "react"
+import { unwrap } from "jotai/utils"
 
-interface Props {
-  answer: Episode
-}
+const unwrappedAnswerAtom = unwrap(GameStateAtoms.answer)
 
-const Results = (props: Props) => {
-  const { answer } = props
+const Results = () => {
+  const answer = useAtomValue(unwrappedAnswerAtom)
   const hasWon = useAtomValue(GameStateAtoms.hasWon)
 
   return (
@@ -25,7 +20,6 @@ const Results = (props: Props) => {
       <span className="text-center text-2xl font-medium">
         See you next play! 🐧
       </span>
-      <Share />
     </div>
   )
 }

@@ -37,43 +37,46 @@ const bocchleProcedure = publicProcedure
   })
 
 export const bocchleRouter = createTRPCRouter({
-  todaysFrames: bocchleProcedure
-    .input(z.object({ attempt: z.number().min(0).max(5) }))
-    .query(async ({ input, ctx }) => {
-      const { attempt } = input
-      const { episodeSeed, randomEpisode } = ctx
+  todaysFrames: bocchleProcedure.query(async ({ ctx }) => {
+    const { episodeSeed, randomEpisode } = ctx
 
-      const episodeFramesCount = (
-        await db
-          .select({ count: count() })
-          .from(framesTable)
-          .where(eq(framesTable.source, randomEpisode as string))
-      )[0]?.count
+    const episodeFramesCount = (
+      await db
+        .select({ count: count() })
+        .from(framesTable)
+        .where(eq(framesTable.source, randomEpisode as string))
+    )[0]?.count
 
-      if (!episodeFramesCount)
-        throw new TRPCError({
-          message: "Couldn't count the number of frames",
-          code: "INTERNAL_SERVER_ERROR",
-        })
-
-      const frameSeed = `${episodeSeed}${attempt}`
-      const randomFrameIndex = Math.round(
-        seedrandom(frameSeed).quick() * (episodeFramesCount - 1),
-      )
-
-      const randomFrame = await db.query.framesTable.findFirst({
-        columns: {
-          id: true,
-          source: true,
-        },
-        where: (frame, { eq }) => eq(frame.source, randomEpisode as string),
-        offset: randomFrameIndex,
+    if (!episodeFramesCount)
+      throw new TRPCError({
+        message: "Couldn't count the number of frames",
+        code: "INTERNAL_SERVER_ERROR",
       })
 
-      return {
-        url: `img/${randomFrame?.id}.png`,
-        // Yes this can be cheated but this game is for fun and I need to show the answer to the player eventually
-        episode: randomEpisode,
-      }
-    }),
+    const randomFramePromises = Array.from({ length: 6 }).map(
+      async (_, attempt) => {
+        const frameSeed = `${episodeSeed}${attempt}`
+        const randomFrameIndex = Math.round(
+          seedrandom(frameSeed).quick() * (episodeFramesCount - 1),
+        )
+        const randomFrame = await db.query.framesTable.findFirst({
+          columns: {
+            id: true,
+            source: true,
+          },
+          where: (frame, { eq }) => eq(frame.source, randomEpisode as string),
+          offset: randomFrameIndex,
+        })
+        return `img/${randomFrame?.id}.png`
+      },
+    )
+
+    const randomFrames = await Promise.all(randomFramePromises)
+
+    return {
+      frames: randomFrames,
+      // Yes this can be cheated but this game is for fun and I need to show the answer to the player eventually
+      episode: randomEpisode,
+    }
+  }),
 })
