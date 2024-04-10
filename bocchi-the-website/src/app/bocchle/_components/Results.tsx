@@ -4,10 +4,8 @@ import { formattedEpisodes } from "@rithik/bocchi-the-website/data/episode"
 import { memo } from "react"
 import { unwrap } from "jotai/utils"
 
-const unwrappedAnswerAtom = unwrap(GameStateAtoms.answer)
-
 const Results = () => {
-  const answer = useAtomValue(unwrappedAnswerAtom)
+  const answer = useAtomValue(unwrap(GameStateAtoms.answer))!
   const hasWon = useAtomValue(GameStateAtoms.hasWon)
 
   return (

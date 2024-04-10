@@ -112,7 +112,7 @@ const currentFrameAtom = atom(async (get) => {
   return frames[unsuccessfulAttempts > 5 ? 5 : unsuccessfulAttempts]!
 })
 
-const loadNextFrameAtom = atom(null, (get, set) => {
+const loadNextFrameAtom = atom(null, (get, _set) => {
   const unsuccessfulAttempts = get(unwrap(unsuccessfulAttemptsAtom))!
   if (unsuccessfulAttempts === 5) return
   const { frames } = get(unwrap(bocchleQueryAtom))!

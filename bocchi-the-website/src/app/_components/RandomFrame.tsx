@@ -2,7 +2,7 @@
 
 import { Loader2 } from "lucide-react"
 import { Button } from "@rithik/bocchi-the-website/components/ui/button"
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import EpisodeDuration from "./EpisodeDuration"
 import ImageFrame from "./ImageFrame"
 import { api } from "@rithik/bocchi-the-website/trpc/react"

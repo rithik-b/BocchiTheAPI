@@ -16,7 +16,7 @@ import { atom, useAtomValue } from "jotai"
 import { Copy, MoreHorizontal, ShareIcon } from "lucide-react"
 import { forwardRef, useCallback, useEffect, useState } from "react"
 import GameStateAtoms from "../GameStateAtoms"
-import { useAtomCallback } from "jotai/utils"
+import { unwrap, useAtomCallback } from "jotai/utils"
 import { SiX } from "@icons-pack/react-simple-icons"
 import { env } from "@rithik/bocchi-the-website/env"
 import {
@@ -43,7 +43,7 @@ import Image from "next/image"
 const shareUrl = `${env.NEXT_PUBLIC_WEBSITE_URL}/bocchle`
 
 const shareMessageAtom = atom((get) => {
-  const attempts = get(GameStateAtoms.attemptsHistoryWithPlaceHolders)
+  const attempts = get(unwrap(GameStateAtoms.attemptsHistoryWithPlaceHolders))!
 
   const attemptsString = attempts
     .map((a) => {
