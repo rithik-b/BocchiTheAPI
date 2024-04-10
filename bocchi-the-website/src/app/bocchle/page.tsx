@@ -33,13 +33,7 @@ const BocchlePage = () => {
 
   return (
     <main className="flex h-full flex-col items-center gap-5 pb-4">
-      {isClient ? (
-        <Suspense fallback={<BocchlePagePlaceholder />}>
-          <BocchlePageClient />
-        </Suspense>
-      ) : (
-        <BocchlePagePlaceholder />
-      )}
+      {isClient ? <BocchlePageClient /> : <BocchlePagePlaceholder />}
     </main>
   )
 }

@@ -6,7 +6,7 @@ import Image, { type ImageProps } from "next/image"
 const ImageFrame = (
   props: Omit<ImageProps, "alt" | "src"> & {
     alt?: string
-    src?: string | StaticImport
+    src?: string | StaticImport | null
   },
 ) => {
   return (

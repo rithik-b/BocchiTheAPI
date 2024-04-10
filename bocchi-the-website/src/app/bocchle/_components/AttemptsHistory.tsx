@@ -1,7 +1,6 @@
 import { useAtomValue } from "jotai/react"
 import Attempt from "./Attempt"
 import GameStateAtoms from "../GameStateAtoms"
-import { unwrap } from "jotai/utils"
 
 interface Props {
   placeholder?: boolean
@@ -10,7 +9,7 @@ interface Props {
 const AttemptsHistory = (props: Props) => {
   const { placeholder = false } = props
   const attemptsHistoryWithPlaceholders = useAtomValue(
-    unwrap(GameStateAtoms.attemptsHistoryWithPlaceHolders),
+    GameStateAtoms.attemptsHistoryWithPlaceHolders,
   )
 
   return (

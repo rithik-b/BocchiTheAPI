@@ -43,7 +43,7 @@ import Image from "next/image"
 const shareUrl = `${env.NEXT_PUBLIC_WEBSITE_URL}/bocchle`
 
 const shareMessageAtom = atom((get) => {
-  const attempts = get(unwrap(GameStateAtoms.attemptsHistoryWithPlaceHolders))!
+  const attempts = get(GameStateAtoms.attemptsHistoryWithPlaceHolders)
 
   const attemptsString = attempts
     .map((a) => {

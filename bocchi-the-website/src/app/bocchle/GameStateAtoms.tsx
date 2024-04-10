@@ -78,8 +78,8 @@ const attemptsHistoryWithStateAtom = atom(async (get) => {
   return (await Promise.all(promises)) as AttemptWithState[]
 })
 
-const attemptsHistoryWithPlaceHoldersAtom = atom(async (get) => {
-  const attemptsHistory = await get(attemptsHistoryWithStateAtom)
+const attemptsHistoryWithPlaceHoldersAtom = atom((get) => {
+  const attemptsHistory = get(unwrap(attemptsHistoryWithStateAtom)) ?? []
   const placeholderCount = 6 - attemptsHistory.length
   const placeholders = Array.from({ length: placeholderCount }).map(() => ({
     attempt: "",
@@ -106,9 +106,13 @@ const lastAttemptDateAtom = atomWithStorage("lastAttemptDate", "", undefined, {
   getOnInit: true,
 })
 
-const currentFrameAtom = atom(async (get) => {
-  const { frames } = await get(bocchleQueryAtom)
-  const unsuccessfulAttempts = await get(unsuccessfulAttemptsAtom)
+const currentFrameAtom = atom((get) => {
+  const query = get(unwrap(bocchleQueryAtom))
+  const unsuccessfulAttempts = get(unwrap(unsuccessfulAttemptsAtom))!
+
+  if (!query) return null
+
+  const { frames } = query
   return frames[unsuccessfulAttempts > 5 ? 5 : unsuccessfulAttempts]!
 })
 
