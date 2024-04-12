@@ -7,6 +7,7 @@ import { atomWithStorage, unwrap } from "jotai/utils"
 import { type Getter, atom } from "jotai/vanilla"
 import { atomEffect } from "jotai-effect"
 import { getDateString } from "@rithik/bocchi-the-website/lib/utils"
+import { getTRPCErrorFromUnknown } from "@trpc/server"
 
 const todaysDateAtom = atom(new Date())
 
@@ -44,13 +45,32 @@ const initializeGameStateEffect = atomEffect((get, set) => {
   set(ranInitialization, true)
 })
 
-const bocchleQueryAtom = api.bocchle.atomWithQuery((get: Getter) => ({
+const _bocchleQueryAtom = api.bocchle.atomWithQuery((get: Getter) => ({
   todaysDate: get(todaysDateAtom),
   timezoneOffset: get(todaysDateAtom).getTimezoneOffset(),
 }))
+const bocchleQueryRetryEffect = atomEffect((_get, set) => {
+  set(_bocchleQueryAtom) // retry
+})
+const bocchleQueryAtom = atom(async (get) => {
+  try {
+    return await get(_bocchleQueryAtom)
+  } catch (e) {
+    if (getTRPCErrorFromUnknown(e)?.message === "This operation was aborted.") {
+      get(bocchleQueryRetryEffect)
+      return null
+    }
+    throw e
+  }
+})
 
 const validateAnswer = async (get: Getter, givenAnswer: string) => {
-  const { episode: actualAnswer } = await get(bocchleQueryAtom)
+  const query = await get(bocchleQueryAtom)
+
+  if (!query) return false
+
+  const { episode: actualAnswer } = query
+
   const sanitizedAnswer = givenAnswer.replace(/^0+/, "")
   const episodesForEd = edToEpisodes.get(actualAnswer as string)
 
@@ -125,7 +145,7 @@ const loadNextFrameAtom = atom(null, (get, _set) => {
 })
 
 const answerAtom = atom(
-  async (get) => (await get(bocchleQueryAtom)).episode as Episode,
+  async (get) => (await get(bocchleQueryAtom))?.episode as Episode,
 )
 
 const GameStateAtoms = {
