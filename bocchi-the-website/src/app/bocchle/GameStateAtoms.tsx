@@ -7,7 +7,7 @@ import { atomWithStorage, unwrap } from "jotai/utils"
 import { type Getter, atom } from "jotai/vanilla"
 import { atomEffect } from "jotai-effect"
 import { getDateString } from "@rithik/bocchi-the-website/lib/utils"
-import { getTRPCErrorFromUnknown } from "@trpc/server"
+import { queryAtomWithRetry } from "@rithik/bocchi-the-website/lib/atomUtils"
 
 const todaysDateAtom = atom(new Date())
 
@@ -20,49 +20,39 @@ const attemptsHistoryAtom = atomWithStorage<string[]>(
   },
 )
 
-const ranInitialization = atom(false)
-const initializeGameStateEffect = atomEffect((get, set) => {
-  if (get(ranInitialization)) return
+const initializeGameStateEffect = (() => {
+  const ranInitialization = atom(false)
+  return atomEffect((get, set) => {
+    if (get(ranInitialization)) return
 
-  // Reset atoms on new day
-  const todaysDate = get(GameStateAtoms.todaysDate)
-  const todaysDateString = getDateString(
-    todaysDate,
-    todaysDate.getTimezoneOffset(),
-  )
-  const lastAttemptDate = get(GameStateAtoms.lastAttemptDate)
-  if (todaysDateString !== lastAttemptDate) {
-    set(GameStateAtoms.attemptsHistory, [])
-    set(GameStateAtoms.lastAttemptDate, todaysDateString)
-  }
-
-  // Migrate from old format
-  const attemptsHistory = get(attemptsHistoryAtom)
-  if (attemptsHistory.length > 0 && typeof attemptsHistory[0] !== "string") {
-    set(attemptsHistoryAtom, [])
-  }
-
-  set(ranInitialization, true)
-})
-
-const _bocchleQueryAtom = api.bocchle.atomWithQuery((get: Getter) => ({
-  todaysDate: get(todaysDateAtom),
-  timezoneOffset: get(todaysDateAtom).getTimezoneOffset(),
-}))
-const bocchleQueryRetryEffect = atomEffect((_get, set) => {
-  set(_bocchleQueryAtom) // retry
-})
-const bocchleQueryAtom = atom(async (get) => {
-  try {
-    return await get(_bocchleQueryAtom)
-  } catch (e) {
-    if (getTRPCErrorFromUnknown(e)?.message === "This operation was aborted.") {
-      get(bocchleQueryRetryEffect)
-      return null
+    // Reset atoms on new day
+    const todaysDate = get(GameStateAtoms.todaysDate)
+    const todaysDateString = getDateString(
+      todaysDate,
+      todaysDate.getTimezoneOffset(),
+    )
+    const lastAttemptDate = get(GameStateAtoms.lastAttemptDate)
+    if (todaysDateString !== lastAttemptDate) {
+      set(GameStateAtoms.attemptsHistory, [])
+      set(GameStateAtoms.lastAttemptDate, todaysDateString)
     }
-    throw e
-  }
-})
+
+    // Migrate from old format
+    const attemptsHistory = get(attemptsHistoryAtom)
+    if (attemptsHistory.length > 0 && typeof attemptsHistory[0] !== "string") {
+      set(attemptsHistoryAtom, [])
+    }
+
+    set(ranInitialization, true)
+  })
+})()
+
+const bocchleQueryAtom = queryAtomWithRetry(
+  api.bocchle.atomWithQuery((get: Getter) => ({
+    todaysDate: get(todaysDateAtom),
+    timezoneOffset: get(todaysDateAtom).getTimezoneOffset(),
+  })),
+)
 
 const validateAnswer = async (get: Getter, givenAnswer: string) => {
   const query = await get(bocchleQueryAtom)
@@ -79,7 +69,7 @@ const validateAnswer = async (get: Getter, givenAnswer: string) => {
     (episodesForEd?.includes(sanitizedAnswer) ?? false)
   )
 }
-const validateAnswerAtom = atom(null, (get, set, givenAnswer: string) =>
+const validateAnswerAtom = atom(null, (get, _set, givenAnswer: string) =>
   validateAnswer(get, givenAnswer),
 )
 
@@ -108,7 +98,7 @@ const attemptsHistoryWithPlaceHoldersAtom = atom((get) => {
   return [...attemptsHistory, ...placeholders] as AttemptWithState[]
 })
 
-const unsuccessfulAttemptsAtom = atom(async (get) => {
+const unsuccessfulAttemptsCountAtom = atom(async (get) => {
   const attempts = await get(attemptsHistoryWithStateAtom)
   return attempts.filter((a) => a.status === "incorrect").length
 })
@@ -118,7 +108,9 @@ const hasWonAtom = atom((get) => {
   return attempts?.[attempts.length - 1]?.status === "correct" ?? false
 })
 
-const hasLostAtom = atom((get) => get(unwrap(unsuccessfulAttemptsAtom)) === 6)
+const hasLostAtom = atom(
+  (get) => get(unwrap(unsuccessfulAttemptsCountAtom)) === 6,
+)
 
 const gameEndedAtom = atom((get) => get(hasWonAtom) || get(hasLostAtom))
 
@@ -128,7 +120,7 @@ const lastAttemptDateAtom = atomWithStorage("lastAttemptDate", "", undefined, {
 
 const currentFrameAtom = atom((get) => {
   const query = get(unwrap(bocchleQueryAtom))
-  const unsuccessfulAttempts = get(unwrap(unsuccessfulAttemptsAtom))!
+  const unsuccessfulAttempts = get(unwrap(unsuccessfulAttemptsCountAtom))!
 
   if (!query) return null
 
@@ -137,7 +129,7 @@ const currentFrameAtom = atom((get) => {
 })
 
 const loadNextFrameAtom = atom(null, (get, _set) => {
-  const unsuccessfulAttempts = get(unwrap(unsuccessfulAttemptsAtom))!
+  const unsuccessfulAttempts = get(unwrap(unsuccessfulAttemptsCountAtom))!
   if (unsuccessfulAttempts === 5) return
   const { frames } = get(unwrap(bocchleQueryAtom))!
   const img = new Image()
