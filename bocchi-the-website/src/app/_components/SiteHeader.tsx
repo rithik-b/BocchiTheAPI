@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { ThemeToggle } from "./ThemeToggle"
-import { Gamepad, Menu } from "lucide-react"
+import { Gamepad, Home, Menu } from "lucide-react"
 import { cn } from "@rithik/bocchi-the-website/lib/utils"
 import {
   Sheet,
@@ -15,13 +15,20 @@ const linkStyles = cn(
   "transition-colors hover:text-pink-400 dark:hover:text-slate-300",
 )
 
+const sheetLinkStyles = cn(
+  "flex w-full items-center justify-center gap-1 text-center text-5xl font-bold tracking-tight sm:text-3xl",
+  linkStyles,
+)
+
+const sheetLinkIconStyles = cn("size-14 sm:size-8")
+
 function SiteHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
     <header className="sticky flex w-full scroll-m-20 items-center justify-between border-b border-b-pink-50 bg-pink-50 p-4 dark:border-b-slate-900 dark:bg-slate-800">
       <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-        <SheetTrigger className="visible px-3 lg:hidden">
+        <SheetTrigger className="px-3">
           <Menu />
         </SheetTrigger>
         <SheetContent
@@ -29,14 +36,19 @@ function SiteHeader() {
           side="left"
         >
           <Link
-            className={cn(
-              "flex w-full items-center justify-center gap-1 text-center text-5xl font-bold tracking-tight sm:text-3xl",
-              linkStyles,
-            )}
+            className={sheetLinkStyles}
             href="/bocchle"
             onClick={() => setIsMenuOpen(false)}
           >
-            <Gamepad className="size-14 sm:size-8" />
+            <Home className={sheetLinkIconStyles} />
+            Home
+          </Link>
+          <Link
+            className={sheetLinkStyles}
+            href="/bocchle"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <Gamepad className={sheetLinkIconStyles} />
             Bocchle
           </Link>
         </SheetContent>
@@ -46,19 +58,7 @@ function SiteHeader() {
           Boccher
         </Link>
       </h1>
-      <div className="flex items-center justify-end gap-5">
-        <Link
-          className={cn(
-            "hidden items-center gap-1 text-2xl font-bold tracking-tight lg:flex",
-            linkStyles,
-          )}
-          href="/bocchle"
-        >
-          <Gamepad />
-          Bocchle
-        </Link>
-        <ThemeToggle />
-      </div>
+      <ThemeToggle />
     </header>
   )
 }
