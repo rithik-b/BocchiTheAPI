@@ -37,7 +37,7 @@ function SiteHeader() {
         >
           <Link
             className={sheetLinkStyles}
-            href="/bocchle"
+            href="/"
             onClick={() => setIsMenuOpen(false)}
           >
             <Home className={sheetLinkIconStyles} />
