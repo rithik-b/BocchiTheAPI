@@ -21,7 +21,7 @@ function SiteHeader() {
   return (
     <header className="sticky flex w-full scroll-m-20 items-center justify-between border-b border-b-pink-50 bg-pink-50 p-4 dark:border-b-slate-900 dark:bg-slate-800">
       <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-        <SheetTrigger className="visible lg:hidden">
+        <SheetTrigger className="visible px-3 lg:hidden">
           <Menu />
         </SheetTrigger>
         <SheetContent

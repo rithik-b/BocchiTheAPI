@@ -1,6 +1,7 @@
 import { cn } from "@rithik/bocchi-the-website/lib/utils"
 import { type VariantProps, cva } from "class-variance-authority"
-import { type HTMLProps, forwardRef } from "react"
+import { type HTMLMotionProps, motion } from "framer-motion"
+import { forwardRef } from "react"
 
 const attemptVariants = cva(
   "flex size-8 items-center justify-center rounded-md p-1 text-white text-sm transition-colors",
@@ -18,21 +19,22 @@ const attemptVariants = cva(
   },
 )
 
-type Props = HTMLProps<HTMLDivElement> & {
+type Props = HTMLMotionProps<"div"> & {
   status?: VariantProps<typeof attemptVariants>["status"]
 }
 
 const Attempt = forwardRef<HTMLDivElement, Props>((props, ref) => {
-  const { status, className, ...rest } = props
+  const { status, className, layout = "position", ...rest } = props
 
   return (
-    <div
+    <motion.div
       className={cn(
         attemptVariants({
           status,
           className,
         }),
       )}
+      layout={layout}
       ref={ref}
       {...rest}
     />

@@ -1,15 +1,16 @@
 "use client"
 
 import ImageFrame from "../_components/ImageFrame"
-import { Suspense, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { cn } from "@rithik/bocchi-the-website/lib/utils"
-import { useAtomValue, useSetAtom } from "jotai/react"
+import { useAtom, useAtomValue, useSetAtom } from "jotai/react"
 import Keypad from "./_components/Keypad"
 import GameStateAtoms from "./GameStateAtoms"
 import AttemptsHistory from "./_components/AttemptsHistory"
 import Results from "./_components/Results"
 import Attempt from "./_components/Attempt"
 import VictoryAnimation from "./_components/VictoryAnimation"
+import { atom } from "jotai"
 
 const imageFrameStyles = cn("flex w-full md:max-w-[768px]")
 
@@ -38,14 +39,19 @@ const BocchlePage = () => {
   )
 }
 
+const answerStatusAtom = atom<"correct" | "incorrect" | undefined>(undefined)
+const layoutIdAtom = atom((get) => {
+  if (!get(answerStatusAtom)) return "attempt-placeholder"
+  return `attempt-${get(GameStateAtoms.attemptsHistory).length}`
+})
+
 const BocchlePageClient = () => {
   const currentFrame = useAtomValue(GameStateAtoms.currentFrame)
   const setAttemptsHistory = useSetAtom(GameStateAtoms.attemptsHistory)
   const gameEnded = useAtomValue(GameStateAtoms.gameEnded)
+  const layoutId = useAtomValue(layoutIdAtom)
   const [answer, setAnswer] = useState("")
-  const [answerStatus, setAnswerStatus] = useState<
-    "correct" | "incorrect" | undefined
-  >(undefined)
+  const [answerStatus, setAnswerStatus] = useAtom(answerStatusAtom)
   const [hasLoadedImage, setHasLoadedImage] = useState(false)
   const [playVictoryAnimation, setPlayVictoryAnimation] = useState(false)
   const validateAnswer = useSetAtom(GameStateAtoms.validateAnswer)
@@ -111,6 +117,8 @@ const BocchlePageClient = () => {
                   answerStatus === "incorrect" && "animate-shake",
                   "h-full max-h-16 min-h-8 w-full sm:h-8",
                 )}
+                key={layoutId}
+                layoutId={layoutId}
                 status={answerStatus}
               >
                 {answer}
