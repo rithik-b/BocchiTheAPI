@@ -1,6 +1,7 @@
 import { useAtomValue } from "jotai/react"
 import Attempt from "./Attempt"
 import GameStateAtoms from "../GameStateAtoms"
+import { motion } from "framer-motion"
 
 interface Props {
   placeholder?: boolean
@@ -24,13 +25,16 @@ const AttemptsHistory = (props: Props) => {
               key={
                 attempt.status !== "placeholder" ? `attempt-${index}` : index
               }
-              layoutId={
-                attempt.status !== "placeholder"
-                  ? `attempt-${index}`
-                  : undefined
-              }
             >
-              {attempt.attempt}
+              <motion.span
+                layoutId={
+                  attempt.status !== "placeholder"
+                    ? `attempt-${index}`
+                    : undefined
+                }
+              >
+                {attempt.attempt}
+              </motion.span>
             </Attempt>
           ))}
     </div>

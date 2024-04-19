@@ -11,6 +11,7 @@ import Results from "./_components/Results"
 import Attempt from "./_components/Attempt"
 import VictoryAnimation from "./_components/VictoryAnimation"
 import { atom } from "jotai"
+import { motion } from "framer-motion"
 
 const imageFrameStyles = cn("flex w-full md:max-w-[768px]")
 
@@ -117,11 +118,11 @@ const BocchlePageClient = () => {
                   answerStatus === "incorrect" && "animate-shake",
                   "h-full max-h-16 min-h-8 w-full sm:h-8",
                 )}
-                key={layoutId}
-                layoutId={layoutId}
                 status={answerStatus}
               >
-                {answer}
+                <motion.span key={layoutId} layoutId={layoutId}>
+                  {answer}
+                </motion.span>
               </Attempt>
             </Keypad>
           </div>

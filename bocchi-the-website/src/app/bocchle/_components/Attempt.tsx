@@ -24,7 +24,7 @@ type Props = HTMLMotionProps<"div"> & {
 }
 
 const Attempt = forwardRef<HTMLDivElement, Props>((props, ref) => {
-  const { status, className, layout = "size", ...rest } = props
+  const { status, className, ...rest } = props
 
   return (
     <motion.div
@@ -34,7 +34,6 @@ const Attempt = forwardRef<HTMLDivElement, Props>((props, ref) => {
           className,
         }),
       )}
-      layout={layout}
       ref={ref}
       {...rest}
     />
