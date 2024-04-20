@@ -20,13 +20,11 @@ const AttemptsHistory = (props: Props) => {
             <Attempt status="placeholder" key={index} />
           ))
         : attemptsHistoryWithPlaceholders?.map((attempt, index) => (
-            <Attempt
-              status={attempt.status}
-              key={
-                attempt.status !== "placeholder" ? `attempt-${index}` : index
-              }
-            >
+            <Attempt status={attempt.status} key={index}>
               <motion.span
+                key={
+                  attempt.status !== "placeholder" ? `attempt-${index}` : index
+                }
                 layoutId={
                   attempt.status !== "placeholder"
                     ? `attempt-${index}`
