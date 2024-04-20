@@ -1,6 +1,6 @@
 import { useAtomValue } from "jotai/react"
 import Attempt from "./Attempt"
-import GameStateAtoms from "../GameStateAtoms"
+import GameStateAtoms from "../BocchleStateAtoms"
 import { motion } from "framer-motion"
 
 interface Props {

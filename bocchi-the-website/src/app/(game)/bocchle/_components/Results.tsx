@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai"
-import GameStateAtoms from "../GameStateAtoms"
+import GameStateAtoms from "../BocchleStateAtoms"
 import { formattedEpisodes } from "@rithik/bocchi-the-website/data/episode"
 import { memo } from "react"
 import { unwrap } from "jotai/utils"

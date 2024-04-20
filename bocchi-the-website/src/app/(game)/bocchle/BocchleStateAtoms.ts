@@ -6,7 +6,10 @@ import { api } from "@rithik/bocchi-the-website/trpc/react"
 import { atomWithStorage, unwrap } from "jotai/utils"
 import { type Getter, atom } from "jotai/vanilla"
 import { atomEffect } from "jotai-effect"
-import { getDateString } from "@rithik/bocchi-the-website/lib/utils"
+import {
+  getDateString,
+  validateAnswer,
+} from "@rithik/bocchi-the-website/lib/utils"
 import { queryAtomWithRetry } from "@rithik/bocchi-the-website/lib/atomUtils"
 
 const todaysDateAtom = atom(new Date())
@@ -54,23 +57,17 @@ const bocchleQueryAtom = queryAtomWithRetry(
   })),
 )
 
-const validateAnswer = async (get: Getter, givenAnswer: string) => {
+const validateBocchleAnswer = async (get: Getter, givenAnswer: string) => {
   const query = await get(bocchleQueryAtom)
 
   if (!query) return false
 
   const { episode: actualAnswer } = query
 
-  const sanitizedAnswer = givenAnswer.replace(/^0+/, "")
-  const episodesForEd = edToEpisodes.get(actualAnswer as string)
-
-  return (
-    sanitizedAnswer === actualAnswer ||
-    (episodesForEd?.includes(sanitizedAnswer) ?? false)
-  )
+  return validateAnswer(givenAnswer, actualAnswer as string)
 }
 const validateAnswerAtom = atom(null, (get, _set, givenAnswer: string) =>
-  validateAnswer(get, givenAnswer),
+  validateBocchleAnswer(get, givenAnswer),
 )
 
 interface AttemptWithState {
@@ -83,7 +80,7 @@ const attemptsHistoryWithStateAtom = atom(async (get) => {
   const attemptsHistory = get(attemptsHistoryAtom)
   const promises = attemptsHistory.map(async (a) => ({
     attempt: a,
-    status: (await validateAnswer(get, a)) ? "correct" : "incorrect",
+    status: (await validateBocchleAnswer(get, a)) ? "correct" : "incorrect",
   }))
   return (await Promise.all(promises)) as AttemptWithState[]
 })

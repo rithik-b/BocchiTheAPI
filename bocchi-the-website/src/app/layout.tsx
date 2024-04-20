@@ -6,12 +6,6 @@ import { cn } from "../lib/utils"
 import { Toaster } from "../components/ui/sonner"
 import JotaiProvider from "../components/JotaiProvider"
 
-export const metadata = {
-  title: "Boccher",
-  description: "Get a random Boccher frame",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
-}
-
 export default function RootLayout({
   children,
 }: {

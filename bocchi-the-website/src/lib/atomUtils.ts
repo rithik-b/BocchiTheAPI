@@ -9,17 +9,22 @@ export const queryAtomWithRetry = <T>(
     set(queryAtom) // retry
   })
 
-  return atom(async (get) => {
-    try {
-      return await get(queryAtom)
-    } catch (e) {
-      if (
-        getTRPCErrorFromUnknown(e)?.message === "This operation was aborted."
-      ) {
-        get(retryEffect)
-        return null
+  return atom(
+    async (get) => {
+      try {
+        return await get(queryAtom)
+      } catch (e) {
+        if (
+          getTRPCErrorFromUnknown(e)?.message === "This operation was aborted."
+        ) {
+          get(retryEffect)
+          return null
+        }
+        throw e
       }
-      throw e
-    }
-  })
+    },
+    (_get, set) => {
+      set(queryAtom)
+    },
+  )
 }

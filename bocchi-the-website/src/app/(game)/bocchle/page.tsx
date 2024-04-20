@@ -1,11 +1,11 @@
 "use client"
 
-import ImageFrame from "../_components/ImageFrame"
+import ImageFrame from "../../_components/ImageFrame"
 import { useEffect, useState } from "react"
 import { cn } from "@rithik/bocchi-the-website/lib/utils"
 import { useAtom, useAtomValue, useSetAtom } from "jotai/react"
 import Keypad from "./_components/Keypad"
-import GameStateAtoms from "./GameStateAtoms"
+import GameStateAtoms from "./BocchleStateAtoms"
 import AttemptsHistory from "./_components/AttemptsHistory"
 import Results from "./_components/Results"
 import Attempt from "./_components/Attempt"
