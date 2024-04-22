@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { env } from "../env"
-import { edToEpisodes } from "../data/episode"
+import { mvToEpisodes } from "../data/episode"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -38,7 +38,7 @@ export function getDaysSinceStart(todaysDate: Date) {
 
 export function validateAnswer(givenAnswer: string, actualAnswer: string) {
   const sanitizedAnswer = givenAnswer.replace(/^0+/, "")
-  const episodesForEd = edToEpisodes.get(actualAnswer)
+  const episodesForEd = mvToEpisodes.get(actualAnswer)
 
   return (
     sanitizedAnswer === actualAnswer ||

@@ -7,24 +7,18 @@ import { unwrap } from "jotai/utils"
 
 const currentPageAtom = atom<"setup" | "game">("setup")
 
-const maxLivesAtom = atom(3)
-const livesAtom = (() => {
-  const _livesAtom = atom(3)
-
-  const capToMaxLivesEffect = atomEffect((get, set) => {
-    const maxLives = get(maxLivesAtom)
-    const lives = get(_livesAtom)
-    if (lives > maxLives) {
-      set(_livesAtom, maxLives)
-    }
-  })
+const livesAtom = atom(3)
+const maxLivesAtom = (() => {
+  const _maxLivesAtom = atom(3)
 
   return atom(
-    (get) => {
-      get(capToMaxLivesEffect)
-      return get(_livesAtom)
+    (get) => get(_maxLivesAtom),
+    (get, set, update: SetStateAction<number>) => {
+      const maxLives =
+        typeof update === "function" ? update(get(_maxLivesAtom)) : update
+      set(_maxLivesAtom, maxLives)
+      set(livesAtom, maxLives)
     },
-    (_get, set, update: number) => set(_livesAtom, update),
   )
 })()
 
@@ -37,7 +31,7 @@ const hasLoadedImageAtom = atom(false)
 const answerAtom = (() => {
   const _answerAtom = atom("")
 
-  const validateAnswerEffect = (
+  const validateBocchleInfiniteAnswer = (
     get: Getter,
     set: Setter,
     givenAnswer: string,
@@ -49,12 +43,17 @@ const answerAtom = (() => {
 
     const isCorrect = validateAnswer(givenAnswer, query.source as string)
 
+    if (isCorrect) set(scoreAtom, (prev) => prev + 1)
+    else set(livesAtom, (prev) => prev - 1)
+
     set(answerStatusAtom, isCorrect ? "correct" : "incorrect")
     set(hasLoadedImageAtom, false)
+    set(currentFrameAtom, query.url)
     set(bocchleInfiniteQueryAtom)
 
     setTimeout(() => {
       set(answerStatusAtom, undefined)
+      set(currentFrameAtom, null)
       set(_answerAtom, "")
     }, 1500)
   }
@@ -64,8 +63,8 @@ const answerAtom = (() => {
     (get, set, update: SetStateAction<string>) => {
       const givenAnswer =
         typeof update === "function" ? update(get(_answerAtom)) : update
-      validateAnswerEffect(get, set, givenAnswer)
-      return set(_answerAtom, update)
+      validateBocchleInfiniteAnswer(get, set, givenAnswer)
+      return set(_answerAtom, givenAnswer)
     },
   )
 })()
@@ -73,10 +72,31 @@ const answerAtom = (() => {
 const scoreAtom = atom(0)
 const gameEndedAtom = atom((get) => get(livesAtom) <= 0)
 
-const currentFrameAtom = atom((get) => {
-  const query = get(unwrap(bocchleInfiniteQueryAtom))
-  return query?.url ?? null
-})
+const currentFrameAtom = (() => {
+  const previousFrameAtom = atom<string | null>(null)
+
+  const loadImageEffect = atomEffect((get) => {
+    const query = get(unwrap(bocchleInfiniteQueryAtom))
+    if (!query) return
+
+    const img = new Image()
+    img.src = query.url
+  })
+
+  return atom(
+    (get) => {
+      get(loadImageEffect)
+
+      const previousFrame = get(previousFrameAtom)
+      if (!!previousFrame) return previousFrame
+
+      const query = get(unwrap(bocchleInfiniteQueryAtom))
+      return query?.url ?? null
+    },
+    (_get, set, update: SetStateAction<string | null>) =>
+      set(previousFrameAtom, update),
+  )
+})()
 
 const BocchleInfiniteStateAtoms = {
   currentPage: currentPageAtom,

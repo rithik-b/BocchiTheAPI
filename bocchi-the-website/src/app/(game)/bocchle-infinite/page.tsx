@@ -15,6 +15,8 @@ import { cn } from "@rithik/bocchi-the-website/lib/utils"
 import ImageFrame from "../../_components/ImageFrame"
 import Keypad from "../_components/Keypad"
 import Attempt from "../_components/Attempt"
+import Lives from "./_components/Lives"
+import Score from "./_components/Score"
 
 const imageFrameStyles = cn("w-full md:max-w-[768px]")
 
@@ -34,7 +36,7 @@ const Setup = () => {
             <div className="flex w-full max-w-[300px] items-center gap-2">
               <Slider
                 min={1}
-                max={10}
+                max={5}
                 step={1}
                 value={[maxLives]}
                 onValueChange={(value) => setMaxLives(value[0]!)}
@@ -65,6 +67,10 @@ const Game = () => {
     <>
       <div className={imageFrameStyles}>
         <ImageFrame src={currentFrame} onLoad={() => setHasLoadedImage(true)} />
+        <div className="mt-4 flex w-full items-end justify-between px-5 md:px-0">
+          <Score />
+          <Lives />
+        </div>
       </div>
       <Keypad value={answer} onChange={setAnswer} disabled={!hasLoadedImage}>
         <Attempt

@@ -1,6 +1,6 @@
 import {
   type Episode,
-  edToEpisodes,
+  mvToEpisodes,
 } from "@rithik/bocchi-the-website/data/episode"
 import { api } from "@rithik/bocchi-the-website/trpc/react"
 import { atomWithStorage, unwrap } from "jotai/utils"
