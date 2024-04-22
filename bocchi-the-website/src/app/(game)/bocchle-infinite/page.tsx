@@ -12,6 +12,9 @@ import { Slider } from "@rithik/bocchi-the-website/components/ui/slider"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import BocchleInfiniteStateAtoms from "./BocchleInfiniteStateAtoms"
 import { cn } from "@rithik/bocchi-the-website/lib/utils"
+import ImageFrame from "../../_components/ImageFrame"
+import Keypad from "../_components/Keypad"
+import Attempt from "../_components/Attempt"
 
 const imageFrameStyles = cn("w-full md:max-w-[768px]")
 
@@ -51,9 +54,29 @@ const Setup = () => {
 }
 
 const Game = () => {
+  const currentFrame = useAtomValue(BocchleInfiniteStateAtoms.currentFrame)
   const [answer, setAnswer] = useAtom(BocchleInfiniteStateAtoms.answer)
+  const answerStatus = useAtomValue(BocchleInfiniteStateAtoms.answerStatus)
+  const [hasLoadedImage, setHasLoadedImage] = useAtom(
+    BocchleInfiniteStateAtoms.hasLoadedImage,
+  )
 
-  return <div>Game</div>
+  return (
+    <>
+      <div className={imageFrameStyles}>
+        <ImageFrame src={currentFrame} onLoad={() => setHasLoadedImage(true)} />
+      </div>
+      <Keypad value={answer} onChange={setAnswer} disabled={!hasLoadedImage}>
+        <Attempt
+          className={cn(answerStatus === "incorrect" && "animate-shake")}
+          status={answerStatus}
+          variant="input"
+        >
+          {answer}
+        </Attempt>
+      </Keypad>
+    </>
+  )
 }
 
 const InfinitePage = () => {

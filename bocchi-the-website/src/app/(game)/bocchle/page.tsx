@@ -4,14 +4,15 @@ import ImageFrame from "../../_components/ImageFrame"
 import { useEffect, useState } from "react"
 import { cn } from "@rithik/bocchi-the-website/lib/utils"
 import { useAtom, useAtomValue, useSetAtom } from "jotai/react"
-import Keypad from "./_components/Keypad"
+import Keypad, { keyButtonStyle } from "../_components/Keypad"
 import GameStateAtoms from "./BocchleStateAtoms"
 import AttemptsHistory from "./_components/AttemptsHistory"
 import Results from "./_components/Results"
-import Attempt from "./_components/Attempt"
+import Attempt from "../_components/Attempt"
 import VictoryAnimation from "./_components/VictoryAnimation"
 import { atom } from "jotai"
 import { motion } from "framer-motion"
+import Tutorial from "./_components/Tutorial/Tutorial"
 
 const imageFrameStyles = cn("flex w-full md:max-w-[768px]")
 
@@ -101,32 +102,29 @@ const BocchlePageClient = () => {
         )}
       >
         <AttemptsHistory placeholder={!currentFrame} />
-        {!!currentFrame && (
-          <div
-            className={cn(
-              "flex h-full max-h-96 w-full flex-col items-center overflow-hidden duration-300",
-              gameEnded && "max-h-0",
-            )}
+        <div
+          className={cn(
+            "flex h-full max-h-96 w-full flex-col items-center overflow-hidden duration-300",
+            gameEnded && "max-h-0",
+          )}
+        >
+          <Keypad
+            value={answer}
+            onChange={setAnswer}
+            disabled={!hasLoadedImage}
+            helpButton={<Tutorial className={keyButtonStyle} />}
           >
-            <Keypad
-              value={answer}
-              onChange={setAnswer}
-              disabled={!hasLoadedImage}
+            <Attempt
+              className={cn(answerStatus === "incorrect" && "animate-shake")}
+              status={answerStatus}
+              variant="input"
             >
-              <Attempt
-                className={cn(
-                  answerStatus === "incorrect" && "animate-shake",
-                  "h-full max-h-16 min-h-8 w-full sm:h-8",
-                )}
-                status={answerStatus}
-              >
-                <motion.span key={layoutId} layoutId={layoutId}>
-                  {answer}
-                </motion.span>
-              </Attempt>
-            </Keypad>
-          </div>
-        )}
+              <motion.span key={layoutId} layoutId={layoutId}>
+                {answer}
+              </motion.span>
+            </Attempt>
+          </Keypad>
+        </div>
         {gameEnded && !!currentFrame && <Results />}
       </div>
     </>

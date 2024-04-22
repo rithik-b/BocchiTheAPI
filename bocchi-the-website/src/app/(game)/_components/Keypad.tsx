@@ -5,21 +5,29 @@ import {
   type SetStateAction,
   type Dispatch,
   type PropsWithChildren,
+  type ReactNode,
 } from "react"
 import { useEffect } from "react"
-import Tutorial from "./Tutorial/Tutorial"
 
 type Props = PropsWithChildren<{
   value: string
   onChange: Dispatch<SetStateAction<string>>
   disabled?: boolean
   className?: string
+  helpButton?: ReactNode
 }>
 
-const keyButtonStyle = cn("h-full max-h-16")
+export const keyButtonStyle = cn("h-full max-h-16")
 
 const Keypad = (props: Props) => {
-  const { value, onChange, disabled = false, className, children } = props
+  const {
+    value,
+    onChange,
+    disabled = false,
+    className,
+    children,
+    helpButton,
+  } = props
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -132,7 +140,7 @@ const Keypad = (props: Props) => {
         >
           9
         </Button>
-        <Tutorial className={keyButtonStyle} />
+        {!!helpButton ? helpButton : <div />}
         <Button
           className={keyButtonStyle}
           onClick={() => onChange((v) => `${v}0`)}

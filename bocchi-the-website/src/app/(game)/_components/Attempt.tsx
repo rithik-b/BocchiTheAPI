@@ -12,25 +12,32 @@ const attemptVariants = cva(
         incorrect: "bg-red-600",
         placeholder: "bg-pink-300 dark:bg-slate-600 text-black dark:text-white",
       },
+      variant: {
+        default: "",
+        input: "h-full max-h-16 min-h-8 w-full sm:h-8",
+      },
     },
     defaultVariants: {
       status: "placeholder",
+      variant: "default",
     },
   },
 )
 
 type Props = HTMLMotionProps<"div"> & {
   status?: VariantProps<typeof attemptVariants>["status"]
+  variant?: VariantProps<typeof attemptVariants>["variant"]
 }
 
 const Attempt = forwardRef<HTMLDivElement, Props>((props, ref) => {
-  const { status, className, ...rest } = props
+  const { status, variant, className, ...rest } = props
 
   return (
     <motion.div
       className={cn(
         attemptVariants({
           status,
+          variant,
           className,
         }),
       )}

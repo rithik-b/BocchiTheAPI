@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai/react"
-import Attempt from "./Attempt"
+import Attempt from "../../_components/Attempt"
 import GameStateAtoms from "../BocchleStateAtoms"
 import { motion } from "framer-motion"
 

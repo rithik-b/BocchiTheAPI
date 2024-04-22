@@ -1,8 +1,9 @@
 import { queryAtomWithRetry } from "@rithik/bocchi-the-website/lib/atomUtils"
 import { validateAnswer } from "@rithik/bocchi-the-website/lib/utils"
 import { api } from "@rithik/bocchi-the-website/trpc/react"
-import { atom } from "jotai"
+import { type Getter, type SetStateAction, type Setter, atom } from "jotai"
 import { atomEffect } from "jotai-effect"
+import { unwrap } from "jotai/utils"
 
 const currentPageAtom = atom<"setup" | "game">("setup")
 
@@ -31,20 +32,51 @@ const bocchleInfiniteQueryAtom = queryAtomWithRetry(
   api.randomFrame.atomWithQuery(undefined),
 )
 
-const answerAtom = atom("")
-const validateBocchleInfiniteAnswerAtom = atom(async (get) => {
-  const query = await get(bocchleInfiniteQueryAtom)
+const answerStatusAtom = atom<"correct" | "incorrect" | undefined>(undefined)
+const hasLoadedImageAtom = atom(false)
+const answerAtom = (() => {
+  const _answerAtom = atom("")
 
-  if (!query) return false
+  const validateAnswerEffect = (
+    get: Getter,
+    set: Setter,
+    givenAnswer: string,
+  ) => {
+    if (givenAnswer.length !== 2) return
 
-  const { source: actualAnswer } = query
-  const givenAnswer = get(answerAtom)
+    const query = get(unwrap(bocchleInfiniteQueryAtom))
+    if (!query) return
 
-  return validateAnswer(givenAnswer, actualAnswer as string)
-})
+    const isCorrect = validateAnswer(givenAnswer, query.source as string)
+
+    set(answerStatusAtom, isCorrect ? "correct" : "incorrect")
+    set(hasLoadedImageAtom, false)
+    set(bocchleInfiniteQueryAtom)
+
+    setTimeout(() => {
+      set(answerStatusAtom, undefined)
+      set(_answerAtom, "")
+    }, 1500)
+  }
+
+  return atom(
+    (get) => get(_answerAtom),
+    (get, set, update: SetStateAction<string>) => {
+      const givenAnswer =
+        typeof update === "function" ? update(get(_answerAtom)) : update
+      validateAnswerEffect(get, set, givenAnswer)
+      return set(_answerAtom, update)
+    },
+  )
+})()
 
 const scoreAtom = atom(0)
 const gameEndedAtom = atom((get) => get(livesAtom) <= 0)
+
+const currentFrameAtom = atom((get) => {
+  const query = get(unwrap(bocchleInfiniteQueryAtom))
+  return query?.url ?? null
+})
 
 const BocchleInfiniteStateAtoms = {
   currentPage: currentPageAtom,
@@ -52,9 +84,11 @@ const BocchleInfiniteStateAtoms = {
   lives: livesAtom,
   bocchleInfiniteQuery: bocchleInfiniteQueryAtom,
   answer: answerAtom,
-  validateBocchleInfiniteAnswer: validateBocchleInfiniteAnswerAtom,
+  answerStatus: answerStatusAtom,
+  hasLoadedImage: hasLoadedImageAtom,
   score: scoreAtom,
   gameEnded: gameEndedAtom,
+  currentFrame: currentFrameAtom,
 }
 
 export default BocchleInfiniteStateAtoms
