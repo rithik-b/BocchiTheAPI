@@ -1,6 +1,6 @@
 import { useAtomValue } from "jotai/react"
 import Attempt from "../../_components/Attempt"
-import GameStateAtoms from "../BocchleStateAtoms"
+import BocchleStateAtoms from "../BocchleStateAtoms"
 import { motion } from "framer-motion"
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 const AttemptsHistory = (props: Props) => {
   const { placeholder = false } = props
   const attemptsHistoryWithPlaceholders = useAtomValue(
-    GameStateAtoms.attemptsHistoryWithPlaceHolders,
+    BocchleStateAtoms.attemptsHistoryWithPlaceHolders,
   )
 
   return (

@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai"
-import BocchleInfiniteStateAtoms from "../BocchleInfiniteStateAtoms"
+import BocchleInfiniteStateAtoms from "../../BocchleInfiniteStateAtoms"
 
 const Score = () => {
   const score = useAtomValue(BocchleInfiniteStateAtoms.score)

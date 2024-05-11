@@ -15,8 +15,9 @@ import { cn } from "@rithik/bocchi-the-website/lib/utils"
 import ImageFrame from "../../_components/ImageFrame"
 import Keypad from "../_components/Keypad"
 import Attempt from "../_components/Attempt"
-import Lives from "./_components/Lives"
-import Score from "./_components/Score"
+import Collapsible from "@rithik/bocchi-the-website/components/Collapsible"
+import Results from "./_components/Results"
+import HUD from "./_components/HUD/HUD"
 
 const imageFrameStyles = cn("w-full md:max-w-[768px]")
 
@@ -62,26 +63,28 @@ const Game = () => {
   const [hasLoadedImage, setHasLoadedImage] = useAtom(
     BocchleInfiniteStateAtoms.hasLoadedImage,
   )
+  const gameEnded = useAtomValue(BocchleInfiniteStateAtoms.gameEnded)
 
   return (
-    <>
-      <div className={imageFrameStyles}>
-        <ImageFrame src={currentFrame} onLoad={() => setHasLoadedImage(true)} />
-        <div className="mt-4 flex w-full items-end justify-between px-5 md:px-0">
-          <Score />
-          <Lives />
-        </div>
-      </div>
-      <Keypad value={answer} onChange={setAnswer} disabled={!hasLoadedImage}>
-        <Attempt
-          className={cn(answerStatus === "incorrect" && "animate-shake")}
-          status={answerStatus}
-          variant="input"
-        >
-          {answer}
-        </Attempt>
-      </Keypad>
-    </>
+    <div className={cn(imageFrameStyles, "flex flex-col gap-4")}>
+      <ImageFrame src={currentFrame} onLoad={() => setHasLoadedImage(true)} />
+      <Collapsible
+        open={!gameEnded}
+        className="flex flex-col items-center gap-4"
+      >
+        <HUD />
+        <Keypad value={answer} onChange={setAnswer} disabled={!hasLoadedImage}>
+          <Attempt
+            className={cn(answerStatus === "incorrect" && "animate-shake")}
+            status={answerStatus}
+            variant="input"
+          >
+            {answer}
+          </Attempt>
+        </Keypad>
+      </Collapsible>
+      {gameEnded && <Results />}
+    </div>
   )
 }
 

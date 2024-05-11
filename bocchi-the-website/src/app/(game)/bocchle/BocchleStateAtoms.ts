@@ -29,15 +29,15 @@ const initializeGameStateEffect = (() => {
     if (get(ranInitialization)) return
 
     // Reset atoms on new day
-    const todaysDate = get(GameStateAtoms.todaysDate)
+    const todaysDate = get(BocchleStateAtoms.todaysDate)
     const todaysDateString = getDateString(
       todaysDate,
       todaysDate.getTimezoneOffset(),
     )
-    const lastAttemptDate = get(GameStateAtoms.lastAttemptDate)
+    const lastAttemptDate = get(BocchleStateAtoms.lastAttemptDate)
     if (todaysDateString !== lastAttemptDate) {
-      set(GameStateAtoms.attemptsHistory, [])
-      set(GameStateAtoms.lastAttemptDate, todaysDateString)
+      set(BocchleStateAtoms.attemptsHistory, [])
+      set(BocchleStateAtoms.lastAttemptDate, todaysDateString)
     }
 
     // Migrate from old format
@@ -137,7 +137,7 @@ const answerAtom = atom(
   async (get) => (await get(bocchleQueryAtom))?.episode as Episode,
 )
 
-const GameStateAtoms = {
+const BocchleStateAtoms = {
   todaysDate: todaysDateAtom,
   validateAnswer: validateAnswerAtom,
   attemptsHistory: attemptsHistoryAtom,
@@ -150,4 +150,4 @@ const GameStateAtoms = {
   answer: answerAtom,
 }
 
-export default GameStateAtoms
+export default BocchleStateAtoms

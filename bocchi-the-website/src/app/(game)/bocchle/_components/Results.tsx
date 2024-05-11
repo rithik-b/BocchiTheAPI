@@ -1,13 +1,13 @@
 import { useAtomValue } from "jotai"
-import GameStateAtoms from "../BocchleStateAtoms"
+import BocchleStateAtoms from "../BocchleStateAtoms"
 import { formattedEpisodes } from "@rithik/bocchi-the-website/data/episode"
 import { memo } from "react"
 import { unwrap } from "jotai/utils"
-import Share from "./Share"
+import BocchleShare from "./Share"
 
 const Results = () => {
-  const answer = useAtomValue(unwrap(GameStateAtoms.answer))!
-  const hasWon = useAtomValue(GameStateAtoms.hasWon)
+  const answer = useAtomValue(unwrap(BocchleStateAtoms.answer))!
+  const hasWon = useAtomValue(BocchleStateAtoms.hasWon)
 
   return (
     <div className="flex flex-col gap-5">
@@ -19,7 +19,7 @@ const Results = () => {
       <span className="text-center text-2xl font-medium">
         See you next play! 🐧
       </span>
-      <Share />
+      <BocchleShare />
     </div>
   )
 }

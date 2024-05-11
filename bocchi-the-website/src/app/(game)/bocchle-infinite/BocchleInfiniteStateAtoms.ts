@@ -5,7 +5,26 @@ import { type Getter, type SetStateAction, type Setter, atom } from "jotai"
 import { atomEffect } from "jotai-effect"
 import { unwrap } from "jotai/utils"
 
-const currentPageAtom = atom<"setup" | "game">("setup")
+const currentPageAtom = (() => {
+  const currentPageAtom = atom<"setup" | "game">("setup")
+
+  return atom(
+    (get) => get(currentPageAtom),
+    (get, set, update: SetStateAction<"setup" | "game">) => {
+      const currentPage =
+        typeof update === "function" ? update(get(currentPageAtom)) : update
+
+      // Reinitialize the game
+      if (currentPage === "game") {
+        set(scoreAtom, 0)
+        set(livesAtom, get(maxLivesAtom))
+        set(bocchleInfiniteQueryAtom)
+      }
+
+      set(currentPageAtom, currentPage)
+    },
+  )
+})()
 
 const livesAtom = atom(3)
 const maxLivesAtom = (() => {
@@ -43,13 +62,21 @@ const answerAtom = (() => {
 
     const isCorrect = validateAnswer(givenAnswer, query.source as string)
 
-    if (isCorrect) set(scoreAtom, (prev) => prev + 1)
-    else set(livesAtom, (prev) => prev - 1)
+    if (isCorrect) {
+      set(answerStatusAtom, "correct")
+      set(scoreAtom, (prev) => prev + 1)
+    } else {
+      set(answerStatusAtom, "incorrect")
+      set(livesAtom, (prev) => prev - 1)
+    }
 
-    set(answerStatusAtom, isCorrect ? "correct" : "incorrect")
     set(hasLoadedImageAtom, false)
-    set(currentFrameAtom, query.url)
-    set(bocchleInfiniteQueryAtom)
+
+    // If the user has lives left, fetch a new frame
+    if (get(livesAtom) > 0) {
+      set(currentFrameAtom, query.url)
+      set(bocchleInfiniteQueryAtom)
+    }
 
     setTimeout(() => {
       set(answerStatusAtom, undefined)
@@ -70,7 +97,10 @@ const answerAtom = (() => {
 })()
 
 const scoreAtom = atom(0)
-const gameEndedAtom = atom((get) => get(livesAtom) <= 0)
+const gameEndedAtom = atom(
+  (get) => get(livesAtom) <= 0 && !get(answerStatusAtom),
+  // Game only ends when lives are 0 and the shake animation is done
+)
 
 const currentFrameAtom = (() => {
   const previousFrameAtom = atom<string | null>(null)

@@ -1,5 +1,5 @@
 import { atom, useAtomValue } from "jotai"
-import BocchleInfiniteStateAtoms from "../BocchleInfiniteStateAtoms"
+import BocchleInfiniteStateAtoms from "../../BocchleInfiniteStateAtoms"
 import { cn } from "@rithik/bocchi-the-website/lib/utils"
 
 const Dorito = ({ className }: { className?: string }) => {
@@ -28,7 +28,7 @@ const Dorito = ({ className }: { className?: string }) => {
 const livesStateAtom = atom((get) => {
   const lives = get(BocchleInfiniteStateAtoms.lives)
   const maxLives = get(BocchleInfiniteStateAtoms.maxLives)
-  return Array.from({ length: maxLives }, (_, i) => i < lives)
+  return Array.from({ length: maxLives }, (_, i) => i < lives).reverse()
 })
 
 const Lives = () => {
@@ -37,7 +37,10 @@ const Lives = () => {
     <div className="flex">
       {livesState.map((fill, i) => (
         <Dorito
-          className={cn("size-8 -rotate-12", !fill && " opacity-50")}
+          className={cn(
+            "size-8 -rotate-12 transition-opacity duration-300",
+            !fill && "opacity-50",
+          )}
           key={i}
         />
       ))}
