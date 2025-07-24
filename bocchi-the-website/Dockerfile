@@ -1,4 +1,4 @@
-FROM imbios/bun-node:18-slim AS deps
+FROM imbios/bun-node:22-slim AS deps
 ARG DEBIAN_FRONTEND=noninteractive
 ARG NEXT_PUBLIC_WEBSITE_URL
 ARG NEXT_PUBLIC_START_DATE
@@ -21,7 +21,7 @@ ENV NODE_ENV production
 RUN bun run build
 
 # Production image, copy all the files and run next
-FROM node:18-slim AS runner
+FROM node:22-slim AS runner
 WORKDIR /app
 
 # Uncomment the following line in case you want to disable telemetry during runtime.
@@ -34,7 +34,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 VOLUME /app/public/img
 VOLUME /app/db
 
-EXPOSE 3001
+EXPOSE 3000
 
-ENV PORT 3001
 CMD ["node", "server.js"]
