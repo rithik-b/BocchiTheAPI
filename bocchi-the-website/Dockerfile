@@ -21,8 +21,6 @@ RUN bun run build
 FROM node:18-slim AS runner
 WORKDIR /app
 
-ARG CONFIG_FILE
-COPY $CONFIG_FILE /app/.env
 ENV NODE_ENV production
 
 # Uncomment the following line in case you want to disable telemetry during runtime.
