@@ -1,5 +1,7 @@
 FROM imbios/bun-node:20-slim AS deps
 ARG DEBIAN_FRONTEND=noninteractive
+ARG NEXT_PUBLIC_WEBSITE_URL
+ARG NEXT_PUBLIC_START_DATE
 
 WORKDIR /app
 
