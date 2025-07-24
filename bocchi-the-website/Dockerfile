@@ -1,4 +1,4 @@
-FROM imbios/bun-node:18-slim AS deps
+FROM imbios/bun-node:20-slim AS deps
 ARG DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /app
@@ -15,13 +15,13 @@ COPY . .
 ENV DATABASE_URL=db/db.sqlite
 ENV NEXT_PUBLIC_WEBSITE_URL=$NEXT_PUBLIC_WEBSITE_URL
 ENV NEXT_PUBLIC_START_DATE=$NEXT_PUBLIC_START_DATE
+ENV NODE_ENV production
+RUN echo "NEXT_PUBLIC_WEBSITE_URL ${NEXT_PUBLIC_WEBSITE_URL}"
 RUN bun run build
 
 # Production image, copy all the files and run next
-FROM node:18-slim AS runner
+FROM node:20-slim AS runner
 WORKDIR /app
-
-ENV NODE_ENV production
 
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
