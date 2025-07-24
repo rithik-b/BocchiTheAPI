@@ -13,8 +13,8 @@ WORKDIR /app
 COPY . .
 
 ENV DATABASE_URL=db/db.sqlite
-ENV NEXT_PUBLIC_WEBSITE_URL=${NEXT_PUBLIC_WEBSITE_URL}
-ENV NEXT_PUBLIC_START_DATE=${NEXT_PUBLIC_START_DATE}
+ENV NEXT_PUBLIC_WEBSITE_URL=$NEXT_PUBLIC_WEBSITE_URL
+ENV NEXT_PUBLIC_START_DATE=$NEXT_PUBLIC_START_DATE
 RUN bun run build
 
 # Production image, copy all the files and run next
@@ -24,7 +24,6 @@ WORKDIR /app
 ARG CONFIG_FILE
 COPY $CONFIG_FILE /app/.env
 ENV NODE_ENV production
-ENV DATABASE_URL=db/db.sqlite
 
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
