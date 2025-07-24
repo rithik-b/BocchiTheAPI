@@ -1,4 +1,4 @@
-FROM imbios/bun-node:20-slim AS deps
+FROM imbios/bun-node:18-slim AS deps
 ARG DEBIAN_FRONTEND=noninteractive
 ARG NEXT_PUBLIC_WEBSITE_URL
 ARG NEXT_PUBLIC_START_DATE
@@ -21,7 +21,7 @@ ENV NODE_ENV production
 RUN bun run build
 
 # Production image, copy all the files and run next
-FROM node:20-slim AS runner
+FROM node:18-slim AS runner
 WORKDIR /app
 
 # Uncomment the following line in case you want to disable telemetry during runtime.
@@ -37,6 +37,4 @@ VOLUME /app/db
 EXPOSE 3000
 
 ENV PORT 3000
-ENV HOST=0.0.0.0
-
 CMD ["node", "server.js"]
